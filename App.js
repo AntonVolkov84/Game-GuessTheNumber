@@ -1,11 +1,18 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, View, Alert, Text } from "react-native";
+import GuessInput from "./components/GuessInput";
 
 export default function App() {
+  const [score, setScore] = useState(0);
+
+  const handleScoreUpdate = (points) => {
+    setScore(score + points);
+  };
+
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <GuessInput onScoreUpdate={handleScoreUpdate} />
+      <Text style={styles.scoreText}>Очки: {score}</Text>
     </View>
   );
 }
@@ -13,8 +20,13 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    height: "100%",
+    marginTop: 40,
+    padding: 20,
+  },
+  scoreText: {
+    fontSize: 24,
+    marginTop: 20,
+    textAlign: "center",
   },
 });
