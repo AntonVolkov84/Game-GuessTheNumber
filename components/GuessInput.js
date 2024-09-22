@@ -116,8 +116,6 @@ const GuessInput = ({ onScoreUpdate }) => {
           if (isPathClear(i, j)) {
             // Устанавливаем индексы ячеек для подсветки
             setHighlightedHintIndex([i, j]);
-            console.log(highlightedHintIndex); // Подсвечиваем первую ячейку
-            // Подсвечиваем вторую ячейку
             return; // Выходим из функции после нахождения первой пары
           }
         }
@@ -182,6 +180,16 @@ const GuessInput = ({ onScoreUpdate }) => {
     }
   };
 
+  const fillEmptyCellsWithRandomNumbers = () => {
+    const updatedNumbers = numbers.map((num) => (num === null ? getRandomNumber() : num));
+    setNumbers(updatedNumbers);
+  };
+
+  const getRandomNumber = () => {
+    // Генерируем случайное число от 1 до 100
+    return Math.floor(Math.random() * 100) + 1;
+  };
+
   const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
@@ -200,6 +208,8 @@ const GuessInput = ({ onScoreUpdate }) => {
 
   return (
     <View>
+      <Text>Условие:</Text>
+      <Text>Сумма чисел по вертикали, горизонтали или диагонали должна делиться на 10</Text>
       <FlatList
         data={numbers}
         renderItem={renderItem}
@@ -208,6 +218,9 @@ const GuessInput = ({ onScoreUpdate }) => {
       />
       <TouchableOpacity style={styles.hintButton} onPress={showHint}>
         <Text style={styles.hintButtonText}>Подсказка</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.hintButton} onPress={fillEmptyCellsWithRandomNumbers}>
+        <Text style={styles.hintButtonText}>Заполнить поля</Text>
       </TouchableOpacity>
       {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
     </View>
@@ -230,7 +243,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   highlightedCell: {
-    borderColor: "red", // Цвет границы для ячейки с препятствием
+    backgroundColor: "red", // Цвет границы для ячейки с препятствием
   },
   highlightedHint: {
     backgroundColor: "green", // Цвет границы для ячейки с препятствием
