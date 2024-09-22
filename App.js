@@ -7,12 +7,12 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
   const pointForNextlevel = [210, 220, 230];
-  const gameDividers = [2, 5, 10, 3, 4, 9, 6, 7];
+  const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
   const ind = (level + 2) % 3;
 
   useEffect(() => {
-    if (+score > +pointForNextlevel[ind]) {
+    if (+score >= +pointForNextlevel[ind]) {
       setRelevel(true);
       setLevel(level + 1);
       setScore(0);

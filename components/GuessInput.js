@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { View, FlatList, TouchableOpacity, Text, StyleSheet } from "react-native";
 
-const GuessInput = ({ onScoreUpdate }) => {
+const GuessInput = ({ onScoreUpdate, gameDeviders, level }) => {
   const [numbers, setNumbers] = useState(Array.from({ length: 100 }, () => Math.floor(Math.random() * 100)));
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
   const [highlightedHintIndex, setHighlightedHintIndex] = useState([]);
   const [hint, setHint] = useState(""); // Состояние для подсказки
+
+  const levelIndex = Math.floor(level / 3);
+  const levelDevider = gameDeviders[levelIndex];
 
   const handlePress = (index) => {
     if (selectedIndices.includes(index)) {
@@ -77,7 +80,9 @@ const GuessInput = ({ onScoreUpdate }) => {
             setSelectedIndices([]);
           } else {
             const sum = newSelectedIndices.reduce((acc, curr) => acc + (numbers[curr] || 0), 0);
-            if (sum % 10 !== 0) {
+            const resultOfMathPlayer = sum % levelDevider;
+            if (resultOfMathPlayer !== 0) {
+              console.log("sum", sum, "result", resultOfMathPlayer, "levelDevider", levelDevider);
               setHighlightedIndex(index);
               setTimeout(() => {
                 setHighlightedIndex(null);
@@ -85,7 +90,8 @@ const GuessInput = ({ onScoreUpdate }) => {
               // Если ячейки не в одной линии, сбрасываем выбор
               setSelectedIndices([]);
             }
-            if (sum % 10 === 0) {
+            if (resultOfMathPlayer === 0) {
+              console.log("sum", sum, "result", resultOfMathPlayer, "levelDevider", levelDevider);
               onScoreUpdate(sum); // Обновляем очки
               // Заменяем значения на пустые
               const updatedNumbers = [...numbers];
@@ -111,7 +117,8 @@ const GuessInput = ({ onScoreUpdate }) => {
     for (let i = 0; i < numbers.length; i++) {
       for (let j = i + 1; j < numbers.length; j++) {
         // Проверяем, что сумма значений делится на 10
-        if (numbers[i] !== null && numbers[j] !== null && (numbers[i] + numbers[j]) % 10 === 0) {
+        const hintResult = numbers[i] + numbers[j];
+        if (numbers[i] !== null && numbers[j] !== null && hintResult % levelDevider === 0) {
           // Проверяем, есть ли препятствия между ячейками
           if (isPathClear(i, j)) {
             // Устанавливаем индексы ячеек для подсветки
@@ -209,7 +216,7 @@ const GuessInput = ({ onScoreUpdate }) => {
   return (
     <View>
       <Text>Условие:</Text>
-      <Text>Сумма чисел по вертикали, горизонтали или диагонали должна делиться на 10</Text>
+      <Text>Сумма чисел по вертикали, горизонтали или диагонали должна делиться на {levelDevider}</Text>
       <FlatList
         data={numbers}
         renderItem={renderItem}
