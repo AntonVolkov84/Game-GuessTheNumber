@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { View, FlatList, TouchableOpacity, Text, StyleSheet } from "react-native";
+import { View, FlatList, TouchableOpacity, Text, Alert, StyleSheet } from "react-native";
 
-const GuessInput = ({ onScoreUpdate, gameDeviders, level }) => {
+const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCount }) => {
   const [numbers, setNumbers] = useState(Array.from({ length: 100 }, () => Math.floor(Math.random() * 100)));
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
@@ -114,6 +114,17 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level }) => {
     }
   };
   const showHint = () => {
+    if (+hintCount <= 0) {
+      return Alert.alert("Подсказки закончились", "Упс", [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        { text: "Просмотреть рекламу", onPress: () => console.log(setHintCount(hintCount + 10)) },
+      ]);
+    }
+    setHintCount(hintCount - 1);
     for (let i = 0; i < numbers.length; i++) {
       for (let j = i + 1; j < numbers.length; j++) {
         // Проверяем, что сумма значений делится на 10
@@ -129,7 +140,7 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level }) => {
       }
     }
     // Если подходящих ячеек не найдено
-    setHint("Подсказок больше нет!"); // Сообщение, если подсказок больше нет
+    setHint("Совпадений по числам нет, заполните пустые поля"); // Сообщение, если подсказок больше нет
   };
 
   const isPathClear = (firstIndex, secondIndex) => {
@@ -224,7 +235,7 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level }) => {
         numColumns={10}
       />
       <TouchableOpacity style={styles.hintButton} onPress={showHint}>
-        <Text style={styles.hintButtonText}>Подсказка</Text>
+        <Text style={styles.hintButtonText}>Подсказка {hintCount}</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.hintButton} onPress={fillEmptyCellsWithRandomNumbers}>
         <Text style={styles.hintButtonText}>Заполнить поля</Text>

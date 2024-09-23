@@ -7,6 +7,7 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
   const pointForNextlevel = [210, 220, 230];
+  const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
   const ind = (level + 2) % 3;
@@ -29,7 +30,13 @@ export default function App() {
         <Fireworks level={level} setRelevel={setRelevel} />
       ) : (
         <>
-          <GuessInput onScoreUpdate={handleScoreUpdate} level={level} gameDeviders={gameDividers} />
+          <GuessInput
+            setHintCount={setHintCount}
+            hintCount={hintCount}
+            onScoreUpdate={handleScoreUpdate}
+            level={level}
+            gameDeviders={gameDividers}
+          />
           <Text style={styles.scoreText}>
             Очки: {score} / {pointForNextlevel[ind]}
           </Text>
