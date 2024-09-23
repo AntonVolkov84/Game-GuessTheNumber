@@ -9,7 +9,7 @@ export default function App() {
   const pointForNextlevel = [210, 220, 230];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
-  const [relevel, setRelevel] = useState(false);
+  const [relevel, setRelevel] = useState(true);
   const ind = (level + 2) % 3;
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       {relevel ? (
-        <Fireworks level={level} setRelevel={setRelevel} />
+        <Fireworks level={level} gameDeviders={gameDividers} setRelevel={setRelevel} />
       ) : (
         <>
           <GuessInput

@@ -82,7 +82,6 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
             const sum = newSelectedIndices.reduce((acc, curr) => acc + (numbers[curr] || 0), 0);
             const resultOfMathPlayer = sum % levelDevider;
             if (resultOfMathPlayer !== 0) {
-              console.log("sum", sum, "result", resultOfMathPlayer, "levelDevider", levelDevider);
               setHighlightedIndex(index);
               setTimeout(() => {
                 setHighlightedIndex(null);
@@ -91,7 +90,6 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
               setSelectedIndices([]);
             }
             if (resultOfMathPlayer === 0) {
-              console.log("sum", sum, "result", resultOfMathPlayer, "levelDevider", levelDevider);
               onScoreUpdate(sum); // Обновляем очки
               // Заменяем значения на пустые
               const updatedNumbers = [...numbers];
