@@ -1,5 +1,6 @@
 import { View, Text, Button } from "react-native";
 import React from "react";
+import LottieView from "lottie-react-native";
 
 const dataMathRule = {
   a: "Помни, что все четные числа делятся на 2! Если сложить два четных числа, гарантировано получим четное в результате.",
@@ -15,7 +16,7 @@ const dataMathRule = {
 export default function Fireworks({ level, setRelevel, gameDeviders }) {
   const levelIndex = Math.floor(level / 3);
   const levelDevider = gameDeviders[levelIndex];
-  console.log(levelDevider);
+
   return (
     <View>
       <Text>Вы переходите на уровень {level}</Text>
@@ -29,6 +30,15 @@ export default function Fireworks({ level, setRelevel, gameDeviders }) {
       {+level >= 18 && +level <= 20 ? <Text>{dataMathRule.g}</Text> : <></>}
       {+level >= 21 && +level <= 23 ? <Text>{dataMathRule.h}</Text> : <></>}
       <Button title="Понял" onPress={() => setRelevel(false)}></Button>
+      <LottieView
+        autoPlay
+        style={{
+          width: "100%",
+          height: 500,
+          backgroundColor: "#eee",
+        }}
+        source={require("../Animation.json")}
+      />
     </View>
   );
 }
