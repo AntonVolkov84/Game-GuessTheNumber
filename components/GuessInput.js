@@ -1,5 +1,38 @@
 import React, { useState } from "react";
 import { View, FlatList, TouchableOpacity, Text, Alert, StyleSheet } from "react-native";
+import styled from "styled-components";
+import { LinearGradient } from "expo-linear-gradient";
+
+const TextLevel = styled.Text`
+  color: coral;
+  align-self: center;
+  font-size: 22px;
+  margin-bottom: 15px;
+`;
+const TextExplaining = styled.Text`
+  color: whitesmoke;
+  align-self: center;
+  justify-content: center;
+  margin-bottom: 15px;
+  font-size: 15px;
+`;
+const ButtonAll = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+`;
+const ButtonAgry = styled.TouchableOpacity`
+  width: 150px;
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 28px;
+`;
+const ButtonText = styled.Text`
+  color: whitesmoke;
+`;
+const GridBox = styled.View`
+  margin-bottom: 15px;
+`;
 
 const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCount }) => {
   const [numbers, setNumbers] = useState(Array.from({ length: 100 }, () => Math.floor(Math.random() * 100)));
@@ -224,20 +257,56 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
 
   return (
     <View>
-      <Text>Условие:</Text>
-      <Text>Сумма чисел по вертикали, горизонтали или диагонали должна делиться на {levelDevider}</Text>
-      <FlatList
-        data={numbers}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={10}
-      />
-      <TouchableOpacity style={styles.hintButton} onPress={showHint}>
-        <Text style={styles.hintButtonText}>Подсказка {hintCount}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.hintButton} onPress={fillEmptyCellsWithRandomNumbers}>
-        <Text style={styles.hintButtonText}>Заполнить поля</Text>
-      </TouchableOpacity>
+      <TextLevel>Условие:</TextLevel>
+      <TextExplaining>
+        Сумма чисел по вертикали, горизонтали или диагонали должна делиться на {levelDevider}
+      </TextExplaining>
+      <GridBox>
+        <FlatList
+          data={numbers}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={10}
+        />
+      </GridBox>
+      <ButtonAll>
+        <ButtonAgry onPress={showHint}>
+          <LinearGradient
+            colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
+            start={{ x: 0.0, y: 0.0 }}
+            end={{ x: 1.0, y: 1.0 }}
+            style={{
+              height: "100%",
+              width: "100%",
+              padding: 10,
+              overflow: "hidden",
+              borderRadius: 30,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ButtonText>Подсказка {hintCount}</ButtonText>
+          </LinearGradient>
+        </ButtonAgry>
+        <ButtonAgry onPress={fillEmptyCellsWithRandomNumbers}>
+          <LinearGradient
+            colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
+            start={{ x: 0.0, y: 0.0 }}
+            end={{ x: 1.0, y: 1.0 }}
+            style={{
+              height: "100%",
+              width: "100%",
+              padding: 10,
+              overflow: "hidden",
+              borderRadius: 30,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ButtonText>Заполнить поля</ButtonText>
+          </LinearGradient>
+        </ButtonAgry>
+      </ButtonAll>
       {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
     </View>
   );
@@ -257,6 +326,7 @@ const styles = StyleSheet.create({
   },
   cellText: {
     fontSize: 16,
+    color: "whitesmoke",
   },
   highlightedCell: {
     backgroundColor: "red", // Цвет границы для ячейки с препятствием
@@ -276,8 +346,8 @@ const styles = StyleSheet.create({
   },
   hintText: {
     marginTop: 10,
-    fontSize: 16,
-    color: "gray",
+    fontSize: 22,
+    color: "coral",
   },
 });
 
