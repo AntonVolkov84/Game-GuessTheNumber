@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, FlatList, TouchableOpacity, Text, Alert, StyleSheet } from "react-native";
+import React, { useState, useeffect } from "react";
+import { View, FlatList, TouchableOpacity, Text, Alert, StyleSheet, Image } from "react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -34,15 +34,56 @@ const GridBox = styled.View`
   margin-bottom: 15px;
 `;
 
-const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCount }) => {
+const ModalBlock = styled.View`
+  height: 100%;
+  width: 100%;
+  background-color: #1e2322;
+  position: fixed;
+`;
+const ModalBlockInfo = styled.View`
+  position: absolute;
+  width: 90%;
+  height: 40%;
+  border-radius: 18px;
+  top: 25%;
+  left: 15px;
+  background-color: #1f433a;
+`;
+const ModalButton = styled.TouchableOpacity`
+  width: 150px;
+  height: 50px;
+  border-radius: 10px;
+`;
+const ModalButtonText = styled.Text`
+  color: whitesmoke;
+`;
+
+const TextScore = styled.Text`
+  color: coral;
+  align-self: center;
+  font-size: 22px;
+  margin-top: 15px;
+`;
+const ModalText = styled.Text`
+  color: coral;
+  display: block;
+  width: 100%;
+  height: 70px;
+  margin: 15px 15px 0 0;
+  font-size: 18px;
+  text-align: center;
+`;
+
+const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCount, score, pointForNextlevel }) => {
   const [numbers, setNumbers] = useState(Array.from({ length: 100 }, () => Math.floor(Math.random() * 100)));
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
   const [highlightedHintIndex, setHighlightedHintIndex] = useState([]);
   const [hint, setHint] = useState(""); // Состояние для подсказки
-
+  const [modal, setModal] = useState(false);
   const levelIndex = Math.floor(level / 3);
   const levelDevider = gameDeviders[levelIndex];
+  const ind = (level + 2) % 3;
 
   const handlePress = (index) => {
     if (selectedIndices.includes(index)) {
@@ -146,14 +187,16 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
   };
   const showHint = () => {
     if (+hintCount <= 0) {
-      return Alert.alert("Подсказки закончились", "Упс", [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        { text: "Просмотреть рекламу", onPress: () => console.log(setHintCount(hintCount + 10)) },
-      ]);
+      // return Alert.alert("Подсказки закончились", "Упс", [
+      //   {
+      //     text: "Cancel",
+      //     onPress: () => console.log("Cancel Pressed"),
+      //     style: "cancel",
+      //   },
+      //   { text: "Просмотреть рекламу", onPress: () => console.log(setHintCount(hintCount + 10)) },
+      // ]);
+      setModal(true);
+      return;
     }
     setHintCount(hintCount - 1);
     for (let i = 0; i < numbers.length; i++) {
@@ -256,7 +299,71 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
   };
 
   return (
-    <View>
+    <View style={{ height: "100%" }}>
+      <ModalBlock style={{ display: modal ? "contents" : "none" }}>
+        <ModalBlockInfo>
+          <ModalText>У вас не осталось подсказок. Вы можете просмотреть рекламу и получить еще 10 шт</ModalText>
+          <Image
+            source={require("../assets/mind.png")}
+            style={{
+              width: 150,
+              height: 150,
+              marginTop: 15,
+              marginHorizontal: "30%",
+              borderRadius: 10,
+              marginBottom: 15,
+            }}
+          ></Image>
+          <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+            <ModalButton
+              onPress={() => {
+                setModal(false);
+              }}
+            >
+              <LinearGradient
+                colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
+                start={{ x: 0.0, y: 0.0 }}
+                end={{ x: 1.0, y: 1.0 }}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  padding: 5,
+                  overflow: "hidden",
+                  borderRadius: 15,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <ModalButtonText>Отмена</ModalButtonText>
+              </LinearGradient>
+            </ModalButton>
+            <ModalButton
+              onPress={() => {
+                setModal(false);
+                console.log("Просмотр и добавление подсказок");
+                setHintCount(hintCount + 10);
+              }}
+            >
+              <LinearGradient
+                colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
+                start={{ x: 0.0, y: 0.0 }}
+                end={{ x: 1.0, y: 1.0 }}
+                style={{
+                  height: "100%",
+                  width: "100%",
+                  padding: 5,
+                  overflow: "hidden",
+                  borderRadius: 15,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <ModalButtonText>Посмотреть рекламу</ModalButtonText>
+              </LinearGradient>
+            </ModalButton>
+          </View>
+        </ModalBlockInfo>
+      </ModalBlock>
       <TextLevel>Условие:</TextLevel>
       <TextExplaining>
         Сумма чисел по вертикали, горизонтали или диагонали должна делиться на {levelDevider}
@@ -308,6 +415,9 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
         </ButtonAgry>
       </ButtonAll>
       {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
+      <TextScore>
+        Очки: {score} / {pointForNextlevel[ind]}
+      </TextScore>
     </View>
   );
 };

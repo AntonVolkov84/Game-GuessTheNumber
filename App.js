@@ -23,7 +23,7 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(true);
   const [level, setLevel] = useState(1);
-  const pointForNextlevel = [2100, 220, 230];
+  const pointForNextlevel = [210, 220, 230];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
@@ -59,15 +59,14 @@ export default function App() {
               style={{ height: "100%", width: "100%", padding: 10 }}
             >
               <GuessInput
+                score={score}
+                pointForNextlevel={pointForNextlevel}
                 setHintCount={setHintCount}
                 hintCount={hintCount}
                 onScoreUpdate={handleScoreUpdate}
                 level={level}
                 gameDeviders={gameDividers}
               />
-              <TextScore>
-                Очки: {score} / {pointForNextlevel[ind]}
-              </TextScore>
             </LinearGradient>
           )}
         </View>
