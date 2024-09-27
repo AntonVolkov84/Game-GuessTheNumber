@@ -3,6 +3,7 @@ import React from "react";
 import LottieView from "lottie-react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -30,6 +31,7 @@ const ButtonText = styled.Text`
 export default function StartLevel({ level, gameDeviders, setStart }) {
   const levelIndex = Math.floor(level / 3);
   const levelDevider = gameDeviders[levelIndex];
+  const { t } = useTranslation();
   return (
     <LinearGradient
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
@@ -37,7 +39,9 @@ export default function StartLevel({ level, gameDeviders, setStart }) {
       end={{ x: 1.0, y: 1.0 }}
       style={{ height: "100%", width: "100%", padding: 10 }}
     >
-      <TextLevel>Вы на уровне {level}</TextLevel>
+      <TextLevel>
+        Вы на уровне {level} {t("yes")}
+      </TextLevel>
       <TextExplaining>
         Сумма чисел по вертикали, горизонтали или диагонали должна делиться на {levelDevider}
       </TextExplaining>

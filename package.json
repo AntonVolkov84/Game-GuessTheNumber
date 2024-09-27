@@ -10,13 +10,17 @@
   },
   "dependencies": {
     "expo": "~51.0.28",
+    "expo-linear-gradient": "~13.0.2",
+    "expo-localization": "~15.0.3",
     "expo-status-bar": "~1.12.1",
+    "i18n-js": "^4.4.3",
+    "i18next": "^23.15.1",
     "lottie-react-native": "6.7.0",
     "react": "^18.3.1",
+    "react-i18next": "^15.0.2",
     "react-native": "^0.75.3",
     "react-native-reanimated": "^3.15.3",
-    "styled-components": "^6.1.13",
-    "expo-linear-gradient": "~13.0.2"
+    "styled-components": "^6.1.13"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0"

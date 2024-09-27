@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Alert, Text } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import GuessInput from "./components/GuessInput";
 import Fireworks from "./components/Fireworks";
 import StartLevel from "./components/StartLevel";
+import Language from "./components/Language";
 import styled from "styled-components";
-import { LinearGradient } from "expo-linear-gradient";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -28,6 +29,7 @@ export default function App() {
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
   const ind = (level + 2) % 3;
+  const [language, setLanguage] = useState(null);
 
   useEffect(() => {
     if (+score >= +pointForNextlevel[ind]) {
@@ -43,31 +45,37 @@ export default function App() {
 
   return (
     <>
-      {start ? (
-        <View style={{ paddingTop: 50 }}>
-          <StartLevel setStart={setStart} level={level} gameDeviders={gameDividers} />
-        </View>
+      {!language ? (
+        <Language setLanguage={setLanguage} />
       ) : (
-        <View style={styles.container}>
-          {relevel ? (
-            <Fireworks level={level} gameDeviders={gameDividers} setRelevel={setRelevel} />
+        <View>
+          {start ? (
+            <View style={{ paddingTop: 50 }}>
+              <StartLevel setStart={setStart} level={level} gameDeviders={gameDividers} />
+            </View>
           ) : (
-            <LinearGradient
-              colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
-              start={{ x: 0.0, y: 0.0 }}
-              end={{ x: 1.0, y: 1.0 }}
-              style={{ height: "100%", width: "100%", padding: 10 }}
-            >
-              <GuessInput
-                score={score}
-                pointForNextlevel={pointForNextlevel}
-                setHintCount={setHintCount}
-                hintCount={hintCount}
-                onScoreUpdate={handleScoreUpdate}
-                level={level}
-                gameDeviders={gameDividers}
-              />
-            </LinearGradient>
+            <View style={styles.container}>
+              {relevel ? (
+                <Fireworks level={level} gameDeviders={gameDividers} setRelevel={setRelevel} />
+              ) : (
+                <LinearGradient
+                  colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
+                  start={{ x: 0.0, y: 0.0 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  style={{ height: "100%", width: "100%", padding: 10 }}
+                >
+                  <GuessInput
+                    score={score}
+                    pointForNextlevel={pointForNextlevel}
+                    setHintCount={setHintCount}
+                    hintCount={hintCount}
+                    onScoreUpdate={handleScoreUpdate}
+                    level={level}
+                    gameDeviders={gameDividers}
+                  />
+                </LinearGradient>
+              )}
+            </View>
           )}
         </View>
       )}
