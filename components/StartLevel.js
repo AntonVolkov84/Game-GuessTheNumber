@@ -39,9 +39,7 @@ export default function StartLevel({ level, gameDeviders, setStart }) {
       end={{ x: 1.0, y: 1.0 }}
       style={{ height: "100%", width: "100%", padding: 10 }}
     >
-      <TextLevel>
-        Вы на уровне {level} {t("yes")}
-      </TextLevel>
+      <TextLevel>Вы на уровне {level}</TextLevel>
       <TextExplaining>
         Сумма чисел по вертикали, горизонтали или диагонали должна делиться на {levelDevider}
       </TextExplaining>

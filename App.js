@@ -48,7 +48,7 @@ export default function App() {
       {!language ? (
         <Language setLanguage={setLanguage} />
       ) : (
-        <View>
+        <>
           {start ? (
             <View style={{ paddingTop: 50 }}>
               <StartLevel setStart={setStart} level={level} gameDeviders={gameDividers} />
@@ -77,7 +77,7 @@ export default function App() {
               )}
             </View>
           )}
-        </View>
+        </>
       )}
     </>
   );
@@ -88,6 +88,5 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     marginTop: 40,
-    // padding: 20,
   },
 });
