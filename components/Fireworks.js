@@ -3,17 +3,7 @@ import React from "react";
 import LottieView from "lottie-react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
-
-const dataMathRule = {
-  a: "Помни, что все четные числа делятся на 2! Если сложить два четных числа или два нечетных, гарантировано получим четное в результате.",
-  b: "Помни, что все числа, которые заканчиваются на 5 и 0 - делятся на 5!",
-  c: "Помни, что все двузначные числа и более, которые заканчиваются на 0 - делятся на 10!",
-  d: "Помни, что все четные числа делятся на 2! Если сложить два четных числа, гарантировано получим четное в результате.",
-  e: "Помни, что все четные числа делятся на 2! Если сложить два четных числа, гарантировано получим четное в результате.",
-  f: "Помни, что все четные числа делятся на 2! Если сложить два четных числа, гарантировано получим четное в результате.",
-  g: "Помни, что все четные числа делятся на 2! Если сложить два четных числа, гарантировано получим четное в результате.",
-  h: "Помни, что все четные числа делятся на 2! Если сложить два четных числа, гарантировано получим четное в результате.",
-};
+import { useTranslation } from "react-i18next";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -26,7 +16,7 @@ const TextExplaining = styled.Text`
   align-self: center;
   justify-content: center;
   margin-bottom: 15px;
-  font-size: 15px;
+  font-size: 18px;
 `;
 const ButtonAgry = styled.TouchableOpacity`
   width: 200px;
@@ -41,6 +31,7 @@ const ButtonText = styled.Text`
 export default function Fireworks({ level, setRelevel, gameDeviders }) {
   const levelIndex = Math.floor(level / 3);
   const levelDevider = gameDeviders[levelIndex];
+  const { t } = useTranslation();
 
   return (
     <LinearGradient
@@ -49,16 +40,20 @@ export default function Fireworks({ level, setRelevel, gameDeviders }) {
       end={{ x: 1.0, y: 1.0 }}
       style={{ height: "100%", width: "100%", padding: 10 }}
     >
-      <TextLevel>Вы переходите на уровень {level}</TextLevel>
-      <TextExplaining>Теперь сумма чисел должна делиться на {levelDevider}</TextExplaining>
-      {+level >= 1 && +level <= 2 ? <TextExplaining>{dataMathRule.a}</TextExplaining> : <></>}
-      {+level >= 3 && +level <= 5 ? <TextExplaining>{dataMathRule.b}</TextExplaining> : <></>}
-      {+level >= 6 && +level <= 8 ? <TextExplaining>{dataMathRule.c}</TextExplaining> : <></>}
-      {+level >= 9 && +level <= 11 ? <TextExplaining>{dataMathRule.d}</TextExplaining> : <></>}
-      {+level >= 12 && +level <= 14 ? <TextExplaining>{dataMathRule.e}</TextExplaining> : <></>}
-      {+level >= 15 && +level <= 17 ? <TextExplaining>{dataMathRule.f}</TextExplaining> : <></>}
-      {+level >= 18 && +level <= 20 ? <TextExplaining>{dataMathRule.g}</TextExplaining> : <></>}
-      {+level >= 21 && +level <= 23 ? <TextExplaining>{dataMathRule.h}</TextExplaining> : <></>}
+      <TextLevel>
+        {t("Fireworks title")} {level}
+      </TextLevel>
+      <TextExplaining>
+        {t("Fireworks rule")} <Text style={{ color: "red" }}>{levelDevider}</Text>
+      </TextExplaining>
+      {+level >= 1 && +level <= 2 ? <TextExplaining>{t("Fireworks a")}</TextExplaining> : <></>}
+      {+level >= 3 && +level <= 5 ? <TextExplaining>{t("Fireworks b")}</TextExplaining> : <></>}
+      {+level >= 6 && +level <= 8 ? <TextExplaining>{t("Fireworks c")}</TextExplaining> : <></>}
+      {+level >= 9 && +level <= 11 ? <TextExplaining>{t("Fireworks d")}</TextExplaining> : <></>}
+      {+level >= 12 && +level <= 14 ? <TextExplaining>{t("Fireworks e")}</TextExplaining> : <></>}
+      {+level >= 15 && +level <= 17 ? <TextExplaining>{t("Fireworks f")}</TextExplaining> : <></>}
+      {+level >= 18 && +level <= 20 ? <TextExplaining>{t("Fireworks g")}</TextExplaining> : <></>}
+      {+level >= 21 && +level <= 23 ? <TextExplaining>{t("Fireworks h")}</TextExplaining> : <></>}
       <LottieView
         autoPlay
         style={{
@@ -86,7 +81,7 @@ export default function Fireworks({ level, setRelevel, gameDeviders }) {
             justifyContent: "center",
           }}
         >
-          <ButtonText>Ясно, понятно</ButtonText>
+          <ButtonText>{t("Fireworks button")}</ButtonText>
         </LinearGradient>
       </ButtonAgry>
     </LinearGradient>

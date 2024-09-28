@@ -1,4 +1,4 @@
-import { View, Modal, SafeAreaView, Text, Button, FlatList, TouchableOpacity } from "react-native";
+import { View, Modal, SafeAreaView, Text, Button, FlatList, TouchableOpacity, Image } from "react-native";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LanguageResources } from "../i18next.js";
@@ -18,15 +18,21 @@ const ButtonLanguage = styled.TouchableOpacity`
   height: 50px;
   margin: 0 auto;
   border-radius: 28px;
-  margin-top: 15%;
+  margin-top: 40%;
 `;
 const ButtonText = styled.Text`
   color: whitesmoke;
+  font-size: 15px;
 `;
 
 export default function Language({ setLanguage }) {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
+  const images = {
+    en: require("../assets/england.png"),
+    ru: require("../assets/russia.png"),
+    ua: require("../assets/ukraine.png"),
+  };
 
   const changeLng = (lng) => {
     i18next.changeLanguage(lng);
@@ -90,7 +96,12 @@ export default function Language({ setLanguage }) {
                     justifyContent: "center",
                   }}
                 >
-                  <ButtonText>{languageList[item].nativeName}</ButtonText>
+                  <View style={{ flexDirection: "row", justifyContent: "center", gap: 10, alignItems: "center" }}>
+                    <View style={{ width: 30, height: 30, borderRadius: 5 }}>
+                      <Image source={images[item]}></Image>
+                    </View>
+                    <ButtonText>{languageList[item].nativeName}</ButtonText>
+                  </View>
                 </LinearGradient>
               </ButtonLanguage>
             )}

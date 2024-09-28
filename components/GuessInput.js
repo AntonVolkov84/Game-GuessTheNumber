@@ -2,6 +2,7 @@ import React, { useState, useeffect } from "react";
 import { View, FlatList, TouchableOpacity, Text, Alert, StyleSheet, Image } from "react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -23,12 +24,13 @@ const ButtonAll = styled.View`
 `;
 const ButtonAgry = styled.TouchableOpacity`
   width: 150px;
-  height: 50px;
+  height: 60px;
   margin: 0 auto;
   border-radius: 28px;
 `;
 const ButtonText = styled.Text`
   color: whitesmoke;
+  text-align: center;
 `;
 const GridBox = styled.View`
   margin-bottom: 15px;
@@ -48,6 +50,7 @@ const ModalBlockInfo = styled.View`
   top: 25%;
   left: 15px;
   background-color: #1f433a;
+  padding: 0 5px 0 5px;
 `;
 const ModalButton = styled.TouchableOpacity`
   width: 150px;
@@ -56,6 +59,7 @@ const ModalButton = styled.TouchableOpacity`
 `;
 const ModalButtonText = styled.Text`
   color: whitesmoke;
+  text-align: center;
 `;
 
 const TextScore = styled.Text`
@@ -84,6 +88,7 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
   const levelIndex = Math.floor(level / 3);
   const levelDevider = gameDeviders[levelIndex];
   const ind = (level + 2) % 3;
+  const { t } = useTranslation();
 
   const handlePress = (index) => {
     if (selectedIndices.includes(index)) {
@@ -302,7 +307,7 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
     <View style={{ height: "100%" }}>
       <ModalBlock style={{ display: modal ? "contents" : "none" }}>
         <ModalBlockInfo>
-          <ModalText>У вас не осталось подсказок. Вы можете просмотреть рекламу и получить еще 10 шт</ModalText>
+          <ModalText>{t("GuessModal info")}</ModalText>
           <Image
             source={require("../assets/mind.png")}
             style={{
@@ -334,7 +339,7 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
                   justifyContent: "center",
                 }}
               >
-                <ModalButtonText>Отмена</ModalButtonText>
+                <ModalButtonText>{t("GuessModal buttoneject")}</ModalButtonText>
               </LinearGradient>
             </ModalButton>
             <ModalButton
@@ -358,15 +363,15 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
                   justifyContent: "center",
                 }}
               >
-                <ModalButtonText>Посмотреть рекламу</ModalButtonText>
+                <ModalButtonText>{t("GuessModal buttonagry")}</ModalButtonText>
               </LinearGradient>
             </ModalButton>
           </View>
         </ModalBlockInfo>
       </ModalBlock>
-      <TextLevel>Условие:</TextLevel>
+      <TextLevel>{t("Guess title")}:</TextLevel>
       <TextExplaining>
-        Сумма чисел по вертикали, горизонтали или диагонали должна делиться на {levelDevider}
+        {t("Guess info")} {levelDevider}
       </TextExplaining>
       <GridBox>
         <FlatList
@@ -392,7 +397,9 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
               justifyContent: "center",
             }}
           >
-            <ButtonText>Подсказка {hintCount}</ButtonText>
+            <ButtonText>
+              {t("Guess hintbutton")} {hintCount}
+            </ButtonText>
           </LinearGradient>
         </ButtonAgry>
         <ButtonAgry onPress={fillEmptyCellsWithRandomNumbers}>
@@ -410,13 +417,13 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
               justifyContent: "center",
             }}
           >
-            <ButtonText>Заполнить поля</ButtonText>
+            <ButtonText>{t("Guess addbutton")}</ButtonText>
           </LinearGradient>
         </ButtonAgry>
       </ButtonAll>
       {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
       <TextScore>
-        Очки: {score} / {pointForNextlevel[ind]}
+        {t("Guess score")}: {score} / {pointForNextlevel[ind]}
       </TextScore>
     </View>
   );

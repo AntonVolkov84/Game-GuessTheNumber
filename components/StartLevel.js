@@ -39,14 +39,13 @@ export default function StartLevel({ level, gameDeviders, setStart }) {
       end={{ x: 1.0, y: 1.0 }}
       style={{ height: "100%", width: "100%", padding: 10 }}
     >
-      <TextLevel>Вы на уровне {level}</TextLevel>
+      <TextLevel>
+        {t("StartLevel title")} {level}
+      </TextLevel>
       <TextExplaining>
-        Сумма чисел по вертикали, горизонтали или диагонали должна делиться на {levelDevider}
+        {t("StartLevel rule")} {levelDevider}
       </TextExplaining>
-      <TextExplaining>
-        Помни, что все четные числа делятся на 2! Если сложить два четных числа или два нечетных - гарантировано получим
-        четное в результате.
-      </TextExplaining>
+      <TextExplaining>{t("StartLevel info")}</TextExplaining>
       <LottieView
         autoPlay
         style={{
@@ -72,7 +71,7 @@ export default function StartLevel({ level, gameDeviders, setStart }) {
             justifyContent: "center",
           }}
         >
-          <ButtonText>Понял</ButtonText>
+          <ButtonText>{t("StartLevel button")}</ButtonText>
         </LinearGradient>
       </ButtonAgry>
     </LinearGradient>
