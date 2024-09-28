@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 
 const TextLevel = styled.Text`
   color: coral;
+  margin-top: 5%;
   align-self: center;
   font-size: 22px;
   margin-bottom: 15px;

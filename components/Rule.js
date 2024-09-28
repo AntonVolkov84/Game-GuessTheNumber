@@ -9,7 +9,6 @@ const ButtonAgryLanguage = styled.TouchableOpacity`
   height: 60px;
   margin: 0 auto;
   border-radius: 28px;
-  margin-top: 50px;
 `;
 const ButtonText = styled.Text`
   color: whitesmoke;
@@ -18,14 +17,21 @@ const ButtonText = styled.Text`
 `;
 const RuleBlock = styled.View`
   flex-direction: row;
+  height: 22%;
   gap: 10px;
   margin-top: 5%;
   justify-content: center;
   align-items: center;
 `;
+const RuleBlockInfo = styled.View`
+  flex-direction: row;
+  height: 12%;
+  justify-content: center;
+  align-items: center;
+`;
 const RuleBlockImage = styled.Image`
   width: 50%;
-  height: 200px;
+  height: 100%;
   border-radius: 18px;
 `;
 const RuleBlockText = styled.Text`
@@ -34,19 +40,29 @@ const RuleBlockText = styled.Text`
   height: content;
   border-radius: 18px;
   color: whitesmoke;
+  padding: 5px;
+  font-size: 22px;
+  text-align: center;
+`;
+const RuleBlockTextInfo = styled.Text`
+  display: block;
+  width: 95%;
+  height: content;
+  border-radius: 18px;
+  color: whitesmoke;
   padding: 10px;
   font-size: 22px;
   text-align: center;
 `;
 
-export default function Rule() {
+export default function Rule({ setRule }) {
   const { t } = useTranslation();
   return (
     <LinearGradient
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
       start={{ x: 0.0, y: 0.0 }}
       end={{ x: 1.0, y: 1.0 }}
-      style={{ height: "100%", width: "100%", padding: 10, marginTop: 40 }}
+      style={{ height: "100%", width: "100%", padding: 10 }}
     >
       <RuleBlock>
         <RuleBlockImage source={require("../assets/Component 1.png")}></RuleBlockImage>
@@ -60,6 +76,9 @@ export default function Rule() {
         <RuleBlockImage source={require("../assets/Component 3.png")}></RuleBlockImage>
         <RuleBlockText>{t("Rule Component3")}</RuleBlockText>
       </RuleBlock>
+      <RuleBlockInfo>
+        <RuleBlockTextInfo>{t("Rule info")}</RuleBlockTextInfo>
+      </RuleBlockInfo>
       <ButtonAgryLanguage>
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
@@ -75,7 +94,7 @@ export default function Rule() {
             justifyContent: "center",
           }}
         >
-          <ButtonText>{t("Rule button")}</ButtonText>
+          <ButtonText onPress={() => setRule(true)}>{t("Rule button")}</ButtonText>
         </LinearGradient>
       </ButtonAgryLanguage>
     </LinearGradient>

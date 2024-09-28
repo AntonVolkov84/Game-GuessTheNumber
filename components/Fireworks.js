@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 
 const TextLevel = styled.Text`
+  margin-top: 5%;
   color: coral;
   align-self: center;
   font-size: 22px;

@@ -7,6 +7,8 @@ import StartLevel from "./components/StartLevel";
 import Language from "./components/Language";
 import styled from "styled-components";
 import Rule from "./components/Rule";
+import Endlevel from "./components/Endlevel";
+import { StatusBar } from "expo-status-bar";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -25,7 +27,7 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(true);
   const [level, setLevel] = useState(1);
-  const pointForNextlevel = [210, 220, 230];
+  const pointForNextlevel = [1000, 1300, 1600];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
@@ -45,18 +47,23 @@ export default function App() {
     setScore(score + points);
   };
 
+  if (+level === 24) {
+    return <Endlevel setLevel={setLevel} />;
+  }
+
   return (
     <>
+      <StatusBar barStyle="light-content" />
       {!language ? (
         <Language setLanguage={setLanguage} />
       ) : (
         <>
           {!rule ? (
-            <Rule />
+            <Rule setRule={setRule} />
           ) : (
             <>
               {start ? (
-                <View style={{ paddingTop: 50 }}>
+                <View>
                   <StartLevel setStart={setStart} level={level} gameDeviders={gameDividers} />
                 </View>
               ) : (
@@ -95,6 +102,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: "100%",
-    marginTop: 40,
+    marginTop: 0,
   },
 });

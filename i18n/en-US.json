@@ -27,5 +27,9 @@
   "Rule button": "I think, I understand",
   "Rule Component1": "You can select adjacent numbers horizontally, vertically or diagonally",
   "Rule Component2": "You cannot select cells between which there is an obstacle from another number",
-  "Rule Component3": "If there is no obstacle on the way, you can choose"
+  "Rule Component3": "If there is no obstacle on the way, you can choose",
+  "Rule info": "To move to a new divisor and a new rule you need to go through 3 stages",
+  "Endlevel greeting": "Congratulations!!!",
+  "Endlevel info": "All levels completed, try again",
+  "Endlevel button": "Try it first"
 }

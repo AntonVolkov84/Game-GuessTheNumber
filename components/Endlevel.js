@@ -1,24 +1,19 @@
-import { View, Text, Button, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
-import LottieView from "lottie-react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+import LottieView from "lottie-react-native";
 
-const TextLevel = styled.Text`
-  color: coral;
-  align-self: center;
+const EndlevelBlockText = styled.Text`
+  width: 100%;
+  height: 8%;
   font-size: 22px;
-  margin-bottom: 15px;
-  margin-top: 5%;
-`;
-const TextExplaining = styled.Text`
+  margin-top: 10%;
   color: whitesmoke;
-  align-self: center;
-  justify-content: center;
-  margin-bottom: 15px;
-  font-size: 15px;
+  text-align: center;
 `;
+
 const ButtonAgry = styled.TouchableOpacity`
   width: 200px;
   height: 50px;
@@ -29,9 +24,7 @@ const ButtonText = styled.Text`
   color: whitesmoke;
 `;
 
-export default function StartLevel({ level, gameDeviders, setStart }) {
-  const levelIndex = Math.floor(level / 3);
-  const levelDevider = gameDeviders[levelIndex];
+export default function Endlevel({ setLevel }) {
   const { t } = useTranslation();
   return (
     <LinearGradient
@@ -40,24 +33,20 @@ export default function StartLevel({ level, gameDeviders, setStart }) {
       end={{ x: 1.0, y: 1.0 }}
       style={{ height: "100%", width: "100%", padding: 10 }}
     >
-      <TextLevel>
-        {t("StartLevel title")} {level}
-      </TextLevel>
-      <TextExplaining>
-        {t("StartLevel rule")} {levelDevider}
-      </TextExplaining>
-      <TextExplaining>{t("StartLevel info")}</TextExplaining>
+      <EndlevelBlockText>{t("Endlevel greeting")}</EndlevelBlockText>
       <LottieView
         autoPlay
         style={{
           width: "100%",
           height: 450,
           backgroundColor: "#1E2322",
+          overflow: "hidden",
           marginBottom: 20,
         }}
-        source={require("../Lottie Lego.json")}
+        source={require("../Animation.json")}
       />
-      <ButtonAgry onPress={() => setStart(false)}>
+      <EndlevelBlockText>{t("Endlevel info")}</EndlevelBlockText>
+      <ButtonAgry onPress={() => setLevel(1)}>
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
           start={{ x: 0.0, y: 0.0 }}
@@ -72,7 +61,7 @@ export default function StartLevel({ level, gameDeviders, setStart }) {
             justifyContent: "center",
           }}
         >
-          <ButtonText>{t("StartLevel button")}</ButtonText>
+          <ButtonText>{t("Endlevel button")}</ButtonText>
         </LinearGradient>
       </ButtonAgry>
     </LinearGradient>

@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "GuessTheNumber",
+    "name": "Combine numbers",
     "slug": "GuessTheNumber",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/Logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,15 +16,19 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ant_volkov.GuessTheNumber"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/Logo.png"
     },
-    "plugins": [
-      "expo-localization"
-    ]
+    "plugins": ["expo-localization"],
+    "extra": {
+      "eas": {
+        "projectId": "1278c9a4-8bf6-4ffa-b1e8-496a1fbea377"
+      }
+    }
   }
 }
