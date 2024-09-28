@@ -86,9 +86,7 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
   const [highlightedHintIndex, setHighlightedHintIndex] = useState([]);
   const [hint, setHint] = useState(""); // Состояние для подсказки
   const [modal, setModal] = useState(false);
-  const levelIndex = Math.floor(level / 3);
-  const levelDevider = gameDeviders[levelIndex];
-  const ind = (level + 2) % 3;
+  const levelDevider = gameDeviders[level - 1];
   const { t } = useTranslation();
 
   const handlePress = (index) => {
@@ -193,14 +191,6 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
   };
   const showHint = () => {
     if (+hintCount <= 0) {
-      // return Alert.alert("Подсказки закончились", "Упс", [
-      //   {
-      //     text: "Cancel",
-      //     onPress: () => console.log("Cancel Pressed"),
-      //     style: "cancel",
-      //   },
-      //   { text: "Просмотреть рекламу", onPress: () => console.log(setHintCount(hintCount + 10)) },
-      // ]);
       setModal(true);
       return;
     }
@@ -346,7 +336,6 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
             <ModalButton
               onPress={() => {
                 setModal(false);
-                console.log("Просмотр и добавление подсказок");
                 setHintCount(hintCount + 10);
               }}
             >
@@ -424,7 +413,7 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
       </ButtonAll>
       {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
       <TextScore>
-        {t("Guess score")}: {score} / {pointForNextlevel[ind]}
+        {t("Guess score")}: {score} / {pointForNextlevel}
       </TextScore>
     </View>
   );

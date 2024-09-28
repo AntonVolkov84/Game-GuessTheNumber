@@ -30,8 +30,7 @@ const ButtonText = styled.Text`
 `;
 
 export default function Fireworks({ level, setRelevel, gameDeviders }) {
-  const levelIndex = Math.floor(level / 3);
-  const levelDevider = gameDeviders[levelIndex];
+  const levelDevider = gameDeviders[level - 1];
   const { t } = useTranslation();
 
   return (
@@ -47,14 +46,13 @@ export default function Fireworks({ level, setRelevel, gameDeviders }) {
       <TextExplaining>
         {t("Fireworks rule")} <Text style={{ color: "red" }}>{levelDevider}</Text>
       </TextExplaining>
-      {+level >= 1 && +level <= 2 ? <TextExplaining>{t("Fireworks a")}</TextExplaining> : <></>}
-      {+level >= 3 && +level <= 5 ? <TextExplaining>{t("Fireworks b")}</TextExplaining> : <></>}
-      {+level >= 6 && +level <= 8 ? <TextExplaining>{t("Fireworks c")}</TextExplaining> : <></>}
-      {+level >= 9 && +level <= 11 ? <TextExplaining>{t("Fireworks d")}</TextExplaining> : <></>}
-      {+level >= 12 && +level <= 14 ? <TextExplaining>{t("Fireworks e")}</TextExplaining> : <></>}
-      {+level >= 15 && +level <= 17 ? <TextExplaining>{t("Fireworks f")}</TextExplaining> : <></>}
-      {+level >= 18 && +level <= 20 ? <TextExplaining>{t("Fireworks g")}</TextExplaining> : <></>}
-      {+level >= 21 && +level <= 23 ? <TextExplaining>{t("Fireworks h")}</TextExplaining> : <></>}
+      {levelDevider === 5 ? <TextExplaining>{t("Fireworks b")}</TextExplaining> : <></>}
+      {levelDevider === 10 ? <TextExplaining>{t("Fireworks c")}</TextExplaining> : <></>}
+      {levelDevider === 3 ? <TextExplaining>{t("Fireworks d")}</TextExplaining> : <></>}
+      {levelDevider === 9 ? <TextExplaining>{t("Fireworks e")}</TextExplaining> : <></>}
+      {levelDevider === 4 ? <TextExplaining>{t("Fireworks f")}</TextExplaining> : <></>}
+      {levelDevider === 6 ? <TextExplaining>{t("Fireworks g")}</TextExplaining> : <></>}
+      {levelDevider === 7 ? <TextExplaining>{t("Fireworks h")}</TextExplaining> : <></>}
       <LottieView
         autoPlay
         style={{

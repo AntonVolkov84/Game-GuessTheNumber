@@ -27,16 +27,15 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(true);
   const [level, setLevel] = useState(1);
-  const pointForNextlevel = [1000, 1300, 1600];
+  const pointForNextlevel = [1000];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
-  const ind = (level + 2) % 3;
   const [language, setLanguage] = useState(null);
   const [rule, setRule] = useState(false);
 
   useEffect(() => {
-    if (+score >= +pointForNextlevel[ind]) {
+    if (+score >= +pointForNextlevel) {
       setRelevel(true);
       setLevel(level + 1);
       setScore(0);
@@ -47,7 +46,7 @@ export default function App() {
     setScore(score + points);
   };
 
-  if (+level === 24) {
+  if (level > 8) {
     return <Endlevel setLevel={setLevel} />;
   }
 
