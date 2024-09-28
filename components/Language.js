@@ -13,6 +13,13 @@ const ButtonAgry = styled.TouchableOpacity`
   margin: 0 auto;
   border-radius: 28px;
 `;
+const ButtonAgryLanguage = styled.TouchableOpacity`
+  width: 150px;
+  height: 50px;
+  margin: 0 auto;
+  border-radius: 28px;
+  margin-top: 50px;
+`;
 const ButtonLanguage = styled.TouchableOpacity`
   width: 150px;
   height: 50px;
@@ -47,7 +54,11 @@ export default function Language({ setLanguage }) {
       end={{ x: 1.0, y: 1.0 }}
       style={{ height: "100%", width: "100%", padding: 10, marginTop: 40 }}
     >
-      <ButtonAgry onPress={() => setVisible(true)}>
+      <Image
+        source={require("../assets/Dance.png")}
+        style={{ width: "100%", height: "60%", borderRadius: 15, objectFit: "cover", marginTop: 50 }}
+      ></Image>
+      <ButtonAgryLanguage onPress={() => setVisible(true)}>
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
           start={{ x: 0.0, y: 0.0 }}
@@ -64,7 +75,7 @@ export default function Language({ setLanguage }) {
         >
           <ButtonText>Change language</ButtonText>
         </LinearGradient>
-      </ButtonAgry>
+      </ButtonAgryLanguage>
       <Modal visible={visible} onRequestClose={() => setVisible(false)}>
         <LinearGradient
           colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
