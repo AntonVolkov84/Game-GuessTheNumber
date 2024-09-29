@@ -6,6 +6,7 @@ import i18next from "../i18next.js";
 import languageList from "../i18n/languageList.json";
 import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components";
+import { Audio } from "expo-av";
 
 const ButtonAgry = styled.TouchableOpacity`
   width: 150px;
@@ -32,7 +33,7 @@ const ButtonText = styled.Text`
   font-size: 15px;
 `;
 
-export default function Language({ setLanguage }) {
+export default function Language({ setLanguage, playSound, sound }) {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const images = {
@@ -58,7 +59,12 @@ export default function Language({ setLanguage }) {
         source={require("../assets/Dance.png")}
         style={{ width: "100%", height: "60%", borderRadius: 15, objectFit: "cover", marginTop: 50 }}
       ></Image>
-      <ButtonAgryLanguage onPress={() => setVisible(true)}>
+      <ButtonAgryLanguage
+        onPress={() => {
+          setVisible(true);
+          playSound();
+        }}
+      >
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
           start={{ x: 0.0, y: 0.0 }}
@@ -92,7 +98,12 @@ export default function Language({ setLanguage }) {
           <FlatList
             data={Object.keys(LanguageResources)}
             renderItem={({ item }) => (
-              <ButtonLanguage onPress={() => changeLng(item)}>
+              <ButtonLanguage
+                onPress={() => {
+                  changeLng(item);
+                  sound.unloadAsync();
+                }}
+              >
                 <LinearGradient
                   colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
                   start={{ x: 0.0, y: 0.0 }}

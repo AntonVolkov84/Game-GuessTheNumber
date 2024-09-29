@@ -9,6 +9,7 @@ import styled from "styled-components";
 import Rule from "./components/Rule";
 import Endlevel from "./components/Endlevel";
 import { StatusBar } from "expo-status-bar";
+import { Audio } from "expo-av";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -26,7 +27,7 @@ const TextScore = styled.Text`
 export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(true);
-  const [level, setLevel] = useState(8);
+  const [level, setLevel] = useState(1);
   const pointForNextlevel = [1000];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
@@ -35,6 +36,7 @@ export default function App() {
   const [rule, setRule] = useState(false);
   const [time, setTime] = useState(0);
   const funRef = useRef(null);
+  const [sound, setSound] = useState();
   let timer = 0;
 
   useEffect(() => {
@@ -44,6 +46,12 @@ export default function App() {
       setScore(0);
     }
   }, [score]);
+
+  const playSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(require("./assets/Light.mp3"), { isLooping: true });
+    setSound(sound);
+    await sound.playAsync();
+  };
 
   const handleScoreUpdate = (points) => {
     setScore(score + points);
@@ -64,7 +72,7 @@ export default function App() {
     <>
       <StatusBar barStyle="light-content" />
       {!language ? (
-        <Language setLanguage={setLanguage} />
+        <Language setLanguage={setLanguage} playSound={playSound} />
       ) : (
         <>
           {!rule ? (
