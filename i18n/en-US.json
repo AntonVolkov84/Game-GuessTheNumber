@@ -9,6 +9,7 @@
   "Guess hintbutton": "Hint",
   "Guess addbutton": "Fill empty cells",
   "Guess score": "Score",
+  "Guess time": "Time",
   "GuessModal info": "You have no hints left. You can view the advertisement and get 10 more",
   "GuessModal buttoneject": "Cancel",
   "GuessModal buttonagry": "View advertisement",
@@ -28,8 +29,8 @@
   "Rule Component1": "You can select adjacent numbers horizontally, vertically or diagonally",
   "Rule Component2": "You cannot select cells between which there is an obstacle from another number",
   "Rule Component3": "If there is no obstacle on the way, you can choose",
-  "Rule info": "To move to a new divisor and a new rule you need to go through 3 stages",
+  "Rule info": "To move to a new divisor and a new rule you need to score points",
   "Endlevel greeting": "Congratulations!!!",
-  "Endlevel info": "All levels completed, try again",
+  "Endlevel info": "All levels completed by",
   "Endlevel button": "Try it first"
 }

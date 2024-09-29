@@ -24,7 +24,7 @@ const ButtonText = styled.Text`
   color: whitesmoke;
 `;
 
-export default function Endlevel({ setLevel }) {
+export default function Endlevel({ setLevel, time, setTime }) {
   const { t } = useTranslation();
   return (
     <LinearGradient
@@ -45,7 +45,9 @@ export default function Endlevel({ setLevel }) {
         }}
         source={require("../Animation.json")}
       />
-      <EndlevelBlockText>{t("Endlevel info")}</EndlevelBlockText>
+      <EndlevelBlockText>
+        {t("Endlevel info")} {time}
+      </EndlevelBlockText>
       <ButtonAgry onPress={() => setLevel(1)}>
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
@@ -61,7 +63,14 @@ export default function Endlevel({ setLevel }) {
             justifyContent: "center",
           }}
         >
-          <ButtonText>{t("Endlevel button")}</ButtonText>
+          <ButtonText
+            onPress={() => {
+              setTime(0);
+              setLevel(1);
+            }}
+          >
+            {t("Endlevel button")}
+          </ButtonText>
         </LinearGradient>
       </ButtonAgry>
     </LinearGradient>

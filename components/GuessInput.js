@@ -69,6 +69,12 @@ const TextScore = styled.Text`
   font-size: 22px;
   margin-top: 15px;
 `;
+const TextTime = styled.Text`
+  color: coral;
+  align-self: center;
+  font-size: 22px;
+  margin-top: 15px;
+`;
 const ModalText = styled.Text`
   color: coral;
   display: block;
@@ -79,7 +85,16 @@ const ModalText = styled.Text`
   text-align: center;
 `;
 
-const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCount, score, pointForNextlevel }) => {
+const GuessInput = ({
+  onScoreUpdate,
+  gameDeviders,
+  level,
+  hintCount,
+  setHintCount,
+  score,
+  time,
+  pointForNextlevel,
+}) => {
   const [numbers, setNumbers] = useState(Array.from({ length: 100 }, () => Math.floor(Math.random() * 100)));
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
@@ -415,6 +430,9 @@ const GuessInput = ({ onScoreUpdate, gameDeviders, level, hintCount, setHintCoun
       <TextScore>
         {t("Guess score")}: {score} / {pointForNextlevel}
       </TextScore>
+      <TextTime>
+        {t("Guess time")}: {time}
+      </TextTime>
     </View>
   );
 };

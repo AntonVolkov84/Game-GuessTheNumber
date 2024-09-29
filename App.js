@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Alert, Text } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import GuessInput from "./components/GuessInput";
@@ -26,13 +26,16 @@ const TextScore = styled.Text`
 export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(true);
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState(8);
   const pointForNextlevel = [1000];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
   const [language, setLanguage] = useState(null);
   const [rule, setRule] = useState(false);
+  const [time, setTime] = useState(0);
+  const funRef = useRef(null);
+  let timer = 0;
 
   useEffect(() => {
     if (+score >= +pointForNextlevel) {
@@ -47,8 +50,15 @@ export default function App() {
   };
 
   if (level > 8) {
-    return <Endlevel setLevel={setLevel} />;
+    clearInterval(funRef.current);
+    return <Endlevel time={time} setTime={setTime} setLevel={setLevel} />;
   }
+  const clockStart = () => {
+    funRef.current = setInterval(() => {
+      timer++;
+      setTime(timer);
+    }, 1000);
+  };
 
   return (
     <>
@@ -63,7 +73,7 @@ export default function App() {
             <>
               {start ? (
                 <View>
-                  <StartLevel setStart={setStart} level={level} gameDeviders={gameDividers} />
+                  <StartLevel clockStart={clockStart} setStart={setStart} level={level} gameDeviders={gameDividers} />
                 </View>
               ) : (
                 <View style={styles.container}>
@@ -77,6 +87,8 @@ export default function App() {
                       style={{ height: "100%", width: "100%", padding: 10 }}
                     >
                       <GuessInput
+                        time={time}
+                        setTime={setTime}
                         score={score}
                         pointForNextlevel={pointForNextlevel}
                         setHintCount={setHintCount}

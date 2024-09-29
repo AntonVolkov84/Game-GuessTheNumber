@@ -9,6 +9,7 @@ const ButtonAgryLanguage = styled.TouchableOpacity`
   height: 60px;
   margin: 0 auto;
   border-radius: 28px;
+  margin-top: 1%;
 `;
 const ButtonText = styled.Text`
   color: whitesmoke;

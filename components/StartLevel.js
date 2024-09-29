@@ -29,7 +29,7 @@ const ButtonText = styled.Text`
   color: whitesmoke;
 `;
 
-export default function StartLevel({ level, gameDeviders, setStart }) {
+export default function StartLevel({ level, gameDeviders, setStart, clockStart }) {
   const levelIndex = Math.floor(level / 3);
   const levelDevider = gameDeviders[levelIndex];
   const { t } = useTranslation();
@@ -57,7 +57,12 @@ export default function StartLevel({ level, gameDeviders, setStart }) {
         }}
         source={require("../Lottie Lego.json")}
       />
-      <ButtonAgry onPress={() => setStart(false)}>
+      <ButtonAgry
+        onPress={() => {
+          setStart(false);
+          clockStart();
+        }}
+      >
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
           start={{ x: 0.0, y: 0.0 }}
