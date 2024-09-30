@@ -6,7 +6,6 @@ import i18next from "../i18next.js";
 import languageList from "../i18n/languageList.json";
 import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components";
-import { Audio } from "expo-av";
 
 const ButtonAgry = styled.TouchableOpacity`
   width: 150px;
@@ -33,7 +32,7 @@ const ButtonText = styled.Text`
   font-size: 15px;
 `;
 
-export default function Language({ setLanguage, playSound, sound }) {
+export default function Language({ setLanguage, playSound }) {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const images = {
@@ -101,7 +100,6 @@ export default function Language({ setLanguage, playSound, sound }) {
               <ButtonLanguage
                 onPress={() => {
                   changeLng(item);
-                  sound.unloadAsync();
                 }}
               >
                 <LinearGradient

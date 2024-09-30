@@ -33,6 +33,7 @@ const RuleBlockInfo = styled.View`
 const RuleBlockImage = styled.Image`
   width: 50%;
   height: 100%;
+  aspect-ratio: 1;
   border-radius: 18px;
 `;
 const RuleBlockText = styled.Text`

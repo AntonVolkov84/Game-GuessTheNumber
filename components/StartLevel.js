@@ -14,10 +14,11 @@ const TextLevel = styled.Text`
 `;
 const TextExplaining = styled.Text`
   color: whitesmoke;
-  align-self: center;
+  align-self: flex-start;
   justify-content: center;
   margin-bottom: 15px;
   font-size: 15px;
+  padding-left: 2%;
 `;
 const ButtonAgry = styled.TouchableOpacity`
   width: 200px;

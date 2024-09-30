@@ -26,6 +26,12 @@ const ButtonText = styled.Text`
 
 export default function Endlevel({ setLevel, time, setTime }) {
   const { t } = useTranslation();
+
+  const getFullTime = () => {
+    const min = Math.floor(time / 60);
+    const sec = time % 60;
+    return `${min} ${t("Endlevel min")} : ${sec} ${t("Endlevel sec")}`;
+  };
   return (
     <LinearGradient
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
@@ -46,7 +52,7 @@ export default function Endlevel({ setLevel, time, setTime }) {
         source={require("../Animation.json")}
       />
       <EndlevelBlockText>
-        {t("Endlevel info")} {time}
+        {t("Endlevel info")} {getFullTime()}
       </EndlevelBlockText>
       <ButtonAgry onPress={() => setLevel(1)}>
         <LinearGradient

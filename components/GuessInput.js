@@ -13,10 +13,11 @@ const TextLevel = styled.Text`
 `;
 const TextExplaining = styled.Text`
   color: whitesmoke;
-  align-self: center;
+  align-self: flex-start;
   justify-content: center;
   margin-bottom: 15px;
   font-size: 15px;
+  padding-left: 2%;
 `;
 const ButtonAll = styled.View`
   flex-direction: row;
@@ -378,6 +379,14 @@ const GuessInput = ({
       <TextExplaining>
         {t("Guess info")} {levelDevider}
       </TextExplaining>
+      {levelDevider === 2 ? <TextExplaining>{t("Fireworks a")}</TextExplaining> : <></>}
+      {levelDevider === 5 ? <TextExplaining>{t("Fireworks b")}</TextExplaining> : <></>}
+      {levelDevider === 10 ? <TextExplaining>{t("Fireworks c")}</TextExplaining> : <></>}
+      {levelDevider === 3 ? <TextExplaining>{t("Fireworks d")}</TextExplaining> : <></>}
+      {levelDevider === 9 ? <TextExplaining>{t("Fireworks e")}</TextExplaining> : <></>}
+      {levelDevider === 4 ? <TextExplaining>{t("Fireworks f")}</TextExplaining> : <></>}
+      {levelDevider === 6 ? <TextExplaining>{t("Fireworks g")}</TextExplaining> : <></>}
+      {levelDevider === 7 ? <TextExplaining>{t("Fireworks h")}</TextExplaining> : <></>}
       <GridBox>
         <FlatList
           data={numbers}
