@@ -1,9 +1,17 @@
-import React, { useState, useeffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, FlatList, TouchableOpacity, Text, Alert, StyleSheet, Image } from "react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
-import { BannerAd, BannerAdSize, TestIds } from "react-native-google-mobile-ads";
+import {
+  AdEventType,
+  BannerAd,
+  BannerAdSize,
+  RewardedAd,
+  RewardedAdEventType,
+  RewardedInterstitialAd,
+  TestIds,
+} from "react-native-google-mobile-ads";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -86,6 +94,9 @@ const ModalText = styled.Text`
   font-size: 18px;
   text-align: center;
 `;
+const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(TestIds.REWARDED_INTERSTITIAL, {
+  requestNonPersonalizedAdsOnly: true,
+});
 
 const GuessInput = ({
   onScoreUpdate,
@@ -105,6 +116,7 @@ const GuessInput = ({
   const [modal, setModal] = useState(false);
   const levelDevider = gameDeviders[level - 1];
   const { t } = useTranslation();
+  const [loadedAdvertisement, setLoadedAdvertisement] = useState(false);
 
   const handlePress = (index) => {
     if (selectedIndices.includes(index)) {
@@ -295,6 +307,22 @@ const GuessInput = ({
     return Math.floor(Math.random() * 100) + 1;
   };
 
+  useEffect(() => {
+    const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(RewardedAdEventType.LOADED, () => {
+      setLoadedAdvertisement(true);
+      console.log("ads Loaded");
+    });
+    const unsubscribeEarned = rewardedInterstitial.addAdEventListener(RewardedAdEventType.EARNED_REWARD, (reward) => {
+      setHintCount(reward.amount);
+      console.log("reward", reward.amount, "hint", hint);
+    });
+    rewardedInterstitial.load();
+    return () => {
+      unsubscribeLoaded();
+      unsubscribeEarned();
+    };
+  }, []);
+
   const renderItem = ({ item, index }) => {
     return (
       <TouchableOpacity
@@ -350,29 +378,54 @@ const GuessInput = ({
                 <ModalButtonText>{t("GuessModal buttoneject")}</ModalButtonText>
               </LinearGradient>
             </ModalButton>
-            <ModalButton
-              onPress={() => {
-                setModal(false);
-                setHintCount(hintCount + 10);
-              }}
-            >
-              <LinearGradient
-                colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
-                start={{ x: 0.0, y: 0.0 }}
-                end={{ x: 1.0, y: 1.0 }}
-                style={{
-                  height: "100%",
-                  width: "100%",
-                  padding: 5,
-                  overflow: "hidden",
-                  borderRadius: 15,
-                  alignItems: "center",
-                  justifyContent: "center",
+            {loadedAdvertisement ? (
+              <ModalButton
+                onPress={() => {
+                  rewardedInterstitial.show();
+                  setModal(false);
                 }}
               >
-                <ModalButtonText>{t("GuessModal buttonagry")}</ModalButtonText>
-              </LinearGradient>
-            </ModalButton>
+                <LinearGradient
+                  colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
+                  start={{ x: 0.0, y: 0.0 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    padding: 5,
+                    overflow: "hidden",
+                    borderRadius: 15,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ModalButtonText>{t("GuessModal buttonagry")}</ModalButtonText>
+                </LinearGradient>
+              </ModalButton>
+            ) : (
+              <ModalButton
+                onPress={() => {
+                  setModal(false);
+                }}
+              >
+                <LinearGradient
+                  colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
+                  start={{ x: 0.0, y: 0.0 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    padding: 5,
+                    overflow: "hidden",
+                    borderRadius: 15,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ModalButtonText>{t("GuessModal buttonNoads")}</ModalButtonText>
+                </LinearGradient>
+              </ModalButton>
+            )}
           </View>
         </ModalBlockInfo>
       </ModalBlock>

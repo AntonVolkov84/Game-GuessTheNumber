@@ -27,7 +27,7 @@ const TextScore = styled.Text`
 export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(true);
-  const [level, setLevel] = useState(1);
+  const [level, setLevel] = useState(9);
   const pointForNextlevel = [1000];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
