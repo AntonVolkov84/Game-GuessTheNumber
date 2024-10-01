@@ -27,7 +27,7 @@ const TextScore = styled.Text`
 export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(true);
-  const [level, setLevel] = useState(8);
+  const [level, setLevel] = useState(1);
   const pointForNextlevel = [1000];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
@@ -48,7 +48,7 @@ export default function App() {
   }, [score]);
 
   const playSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(require("./assets/Light.mp3"), { isLooping: true });
+    const { sound } = await Audio.Sound.createAsync(require("./assets/Light2.mp3"), { isLooping: true });
     setSound(sound);
     await sound.playAsync();
   };

@@ -3,6 +3,7 @@ import { View, FlatList, TouchableOpacity, Text, Alert, StyleSheet, Image } from
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+import { BannerAd, BannerAdSize, TestIds } from "react-native-google-mobile-ads";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -442,6 +443,18 @@ const GuessInput = ({
       <TextTime>
         {t("Guess time")}: {time}
       </TextTime>
+      <View style={{ position: "absolute", bottom: 0 }}>
+        <BannerAd
+          unitId={TestIds.BANNER}
+          size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+            networkExtras: {
+              collapsible: "bottom",
+            },
+          }}
+        />
+      </View>
     </View>
   );
 };

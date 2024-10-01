@@ -24,7 +24,16 @@
     "web": {
       "favicon": "./assets/Logo.png"
     },
-    "plugins": ["expo-localization"],
+    "plugins": [
+      "expo-localization",
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-9267417700367649~2730067780",
+          "userTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
+        }
+      ]
+    ],
     "extra": {
       "eas": {
         "projectId": "1278c9a4-8bf6-4ffa-b1e8-496a1fbea377"
