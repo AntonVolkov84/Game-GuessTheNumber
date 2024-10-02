@@ -97,6 +97,9 @@ const ModalText = styled.Text`
 const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(TestIds.REWARDED_INTERSTITIAL, {
   requestNonPersonalizedAdsOnly: true,
 });
+const rewardedInterstitialFillCells = RewardedInterstitialAd.createForAdRequest(TestIds.REWARDED_INTERSTITIAL, {
+  requestNonPersonalizedAdsOnly: true,
+});
 
 const GuessInput = ({
   onScoreUpdate,
@@ -117,6 +120,7 @@ const GuessInput = ({
   const levelDevider = gameDeviders[level - 1];
   const { t } = useTranslation();
   const [loadedAdvertisement, setLoadedAdvertisement] = useState(false);
+  const [loadedAdvertisementFillCells, setLoadedAdvertisementFillCells] = useState(false);
 
   const handlePress = (index) => {
     if (selectedIndices.includes(index)) {
@@ -308,18 +312,46 @@ const GuessInput = ({
   };
 
   useEffect(() => {
+    const unsubscribeLoadedFillCells = rewardedInterstitialFillCells.addAdEventListener(
+      RewardedAdEventType.LOADED,
+      () => {
+        setLoadedAdvertisementFillCells(true);
+      }
+    );
     const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(RewardedAdEventType.LOADED, () => {
       setLoadedAdvertisement(true);
-      console.log("ads Loaded");
     });
+    const unsubscribeEarnedFillCells = rewardedInterstitialFillCells.addAdEventListener(
+      RewardedAdEventType.EARNED_REWARD,
+      () => {
+        fillEmptyCellsWithRandomNumbers();
+      }
+    );
     const unsubscribeEarned = rewardedInterstitial.addAdEventListener(RewardedAdEventType.EARNED_REWARD, (reward) => {
       setHintCount(reward.amount);
-      console.log("reward", reward.amount, "hint", hint);
     });
+    // const unsubscribeClose = rewardedInterstitial.addAdEventListener(RewardedAdEventType.CLOSED, () => {
+    //   console.log("closed closed");
+    //   setLoadedAdvertisement(false);
+    //   rewardedInterstitial.load();
+    // });
+    // const unsubscribeCloseFillCells = rewardedInterstitialFillCells.addAdEventListener(
+    //   RewardedAdEventType.CLOSED,
+    //   () => {
+    //     console.log("closed closed Fill Cells");
+    //     setLoadedAdvertisementFillCells(false);
+    //     rewardedInterstitialFillCells.load();
+    //   }
+    // );
     rewardedInterstitial.load();
+    rewardedInterstitialFillCells.load();
     return () => {
       unsubscribeLoaded();
       unsubscribeEarned();
+      unsubscribeEarnedFillCells();
+      unsubscribeLoadedFillCells();
+      // unsubscribeClose();
+      // unsubscribeCloseFillCells();
     };
   }, []);
 
@@ -465,12 +497,20 @@ const GuessInput = ({
               justifyContent: "center",
             }}
           >
-            <ButtonText>
-              {t("Guess hintbutton")} {hintCount}
-            </ButtonText>
+            {hintCount === 0 ? (
+              <ButtonText>{t("Guess hintbuttonOff")}</ButtonText>
+            ) : (
+              <ButtonText>
+                {t("Guess hintbutton")} {hintCount}
+              </ButtonText>
+            )}
           </LinearGradient>
         </ButtonAgry>
-        <ButtonAgry onPress={fillEmptyCellsWithRandomNumbers}>
+        <ButtonAgry
+          onPress={() => {
+            loadedAdvertisementFillCells ? rewardedInterstitialFillCells.show() : fillEmptyCellsWithRandomNumbers();
+          }}
+        >
           <LinearGradient
             colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
             start={{ x: 0.0, y: 0.0 }}

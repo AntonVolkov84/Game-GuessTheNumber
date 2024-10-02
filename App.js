@@ -27,7 +27,7 @@ const TextScore = styled.Text`
 export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(true);
-  const [level, setLevel] = useState(9);
+  const [level, setLevel] = useState(1);
   const pointForNextlevel = [1000];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
@@ -70,7 +70,7 @@ export default function App() {
 
   return (
     <>
-      <StatusBar barStyle="light-content" />
+      <StatusBar style="light" />
       {!language ? (
         <Language setLanguage={setLanguage} playSound={playSound} />
       ) : (
@@ -92,7 +92,7 @@ export default function App() {
                       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
                       start={{ x: 0.0, y: 0.0 }}
                       end={{ x: 1.0, y: 1.0 }}
-                      style={{ height: "100%", width: "100%", padding: 10 }}
+                      style={{ height: "100%", width: "100%", padding: 10, paddingTop: "5%" }}
                     >
                       <GuessInput
                         time={time}
