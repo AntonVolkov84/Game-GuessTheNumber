@@ -14,8 +14,7 @@ const TextLevel = styled.Text`
 `;
 const TextExplaining = styled.Text`
   color: whitesmoke;
-  align-self: center;
-  justify-content: center;
+  align-self: flex-start;
   margin-bottom: 15px;
   font-size: 18px;
 `;

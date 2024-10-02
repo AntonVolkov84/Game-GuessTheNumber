@@ -12,6 +12,7 @@ import {
   RewardedInterstitialAd,
   TestIds,
 } from "react-native-google-mobile-ads";
+import { Audio } from "expo-av";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -94,6 +95,7 @@ const ModalText = styled.Text`
   font-size: 18px;
   text-align: center;
 `;
+
 const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(TestIds.REWARDED_INTERSTITIAL, {
   requestNonPersonalizedAdsOnly: true,
 });
@@ -102,6 +104,7 @@ const rewardedInterstitialFillCells = RewardedInterstitialAd.createForAdRequest(
 });
 
 const GuessInput = ({
+  sound,
   onScoreUpdate,
   gameDeviders,
   level,
@@ -330,19 +333,7 @@ const GuessInput = ({
     const unsubscribeEarned = rewardedInterstitial.addAdEventListener(RewardedAdEventType.EARNED_REWARD, (reward) => {
       setHintCount(reward.amount);
     });
-    // const unsubscribeClose = rewardedInterstitial.addAdEventListener(RewardedAdEventType.CLOSED, () => {
-    //   console.log("closed closed");
-    //   setLoadedAdvertisement(false);
-    //   rewardedInterstitial.load();
-    // });
-    // const unsubscribeCloseFillCells = rewardedInterstitialFillCells.addAdEventListener(
-    //   RewardedAdEventType.CLOSED,
-    //   () => {
-    //     console.log("closed closed Fill Cells");
-    //     setLoadedAdvertisementFillCells(false);
-    //     rewardedInterstitialFillCells.load();
-    //   }
-    // );
+
     rewardedInterstitial.load();
     rewardedInterstitialFillCells.load();
     return () => {
@@ -350,8 +341,6 @@ const GuessInput = ({
       unsubscribeEarned();
       unsubscribeEarnedFillCells();
       unsubscribeLoadedFillCells();
-      // unsubscribeClose();
-      // unsubscribeCloseFillCells();
     };
   }, []);
 

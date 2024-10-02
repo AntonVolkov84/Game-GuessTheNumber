@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Alert, Text } from "react-native";
+import { StyleSheet, View, Alert, Text, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import GuessInput from "./components/GuessInput";
 import Fireworks from "./components/Fireworks";
@@ -10,6 +10,7 @@ import Rule from "./components/Rule";
 import Endlevel from "./components/Endlevel";
 import { StatusBar } from "expo-status-bar";
 import { Audio } from "expo-av";
+import Entypo from "@expo/vector-icons/Entypo";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -22,6 +23,14 @@ const TextScore = styled.Text`
   align-self: center;
   font-size: 22px;
   margin-top: 15px;
+`;
+const SoundViewBlock = styled.View`
+  flex-direction: row;
+  position: absolute;
+  width: fit-content;
+  height: 20px;
+  top: 5%;
+  right: 5%;
 `;
 
 export default function App() {
@@ -36,7 +45,9 @@ export default function App() {
   const [rule, setRule] = useState(false);
   const [time, setTime] = useState(0);
   const funRef = useRef(null);
+  const soundRef = useRef(null);
   const [sound, setSound] = useState();
+  const [soundPaused, setSoundPaused] = useState(false);
   let timer = 0;
 
   useEffect(() => {
@@ -49,7 +60,7 @@ export default function App() {
 
   const playSound = async () => {
     const { sound } = await Audio.Sound.createAsync(require("./assets/Light2.mp3"), { isLooping: true });
-    setSound(sound);
+    soundRef.current = sound;
     await sound.playAsync();
   };
 
@@ -94,7 +105,31 @@ export default function App() {
                       end={{ x: 1.0, y: 1.0 }}
                       style={{ height: "100%", width: "100%", padding: 10, paddingTop: "5%" }}
                     >
+                      <SoundViewBlock>
+                        {soundPaused ? (
+                          <TouchableOpacity
+                            onPress={() => {
+                              console.log("Sound go");
+                              setSoundPaused(false);
+                              soundRef.current.playAsync();
+                            }}
+                          >
+                            <Entypo name="sound" size={24} color="#c7b22e" />
+                          </TouchableOpacity>
+                        ) : (
+                          <TouchableOpacity
+                            onPress={() => {
+                              console.log("paused");
+                              setSoundPaused(true);
+                              soundRef.current.pauseAsync();
+                            }}
+                          >
+                            <Entypo name="sound-mute" size={24} color="#c7b22e" />
+                          </TouchableOpacity>
+                        )}
+                      </SoundViewBlock>
                       <GuessInput
+                        sound={sound}
                         time={time}
                         setTime={setTime}
                         score={score}
