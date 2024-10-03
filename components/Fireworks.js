@@ -37,7 +37,7 @@ export default function Fireworks({ level, setRelevel, gameDeviders }) {
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
       start={{ x: 0.0, y: 0.0 }}
       end={{ x: 1.0, y: 1.0 }}
-      style={{ height: "100%", width: "100%", padding: 10 }}
+      style={{ height: "100%", width: "100%", padding: 10, paddingTop: "5%" }}
     >
       <TextLevel>
         {t("Fireworks title")} {level}

@@ -319,10 +319,12 @@ const GuessInput = ({
       RewardedAdEventType.LOADED,
       () => {
         setLoadedAdvertisementFillCells(true);
+        console.log("fill cells LOAD ADS");
       }
     );
     const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(RewardedAdEventType.LOADED, () => {
       setLoadedAdvertisement(true);
+      console.log("ADS to hints load");
     });
     const unsubscribeEarnedFillCells = rewardedInterstitialFillCells.addAdEventListener(
       RewardedAdEventType.EARNED_REWARD,
@@ -330,8 +332,16 @@ const GuessInput = ({
         fillEmptyCellsWithRandomNumbers();
       }
     );
+    const unsubscribeCloseFillCells = rewardedInterstitialFillCells.addAdEventListener(AdEventType.CLOSED, () => {
+      setLoadedAdvertisementFillCells(false);
+      rewardedInterstitialFillCells.load();
+    });
     const unsubscribeEarned = rewardedInterstitial.addAdEventListener(RewardedAdEventType.EARNED_REWARD, (reward) => {
       setHintCount(reward.amount);
+    });
+    const unsubscribeClosed = rewardedInterstitial.addAdEventListener(AdEventType.CLOSED, () => {
+      setLoadedAdvertisement(false);
+      rewardedInterstitial.load();
     });
 
     rewardedInterstitial.load();
@@ -341,6 +351,8 @@ const GuessInput = ({
       unsubscribeEarned();
       unsubscribeEarnedFillCells();
       unsubscribeLoadedFillCells();
+      unsubscribeCloseFillCells();
+      unsubscribeClosed();
     };
   }, []);
 

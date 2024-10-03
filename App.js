@@ -11,6 +11,7 @@ import Endlevel from "./components/Endlevel";
 import { StatusBar } from "expo-status-bar";
 import { Audio } from "expo-av";
 import Entypo from "@expo/vector-icons/Entypo";
+import * as NavigationBar from "expo-navigation-bar";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -50,7 +51,13 @@ export default function App() {
   const [soundPaused, setSoundPaused] = useState(false);
   let timer = 0;
 
+  const customNavigationBar = async () => {
+    await NavigationBar.setBackgroundColorAsync("#1E2322");
+    await NavigationBarButtonStyle("light");
+  };
+
   useEffect(() => {
+    customNavigationBar();
     if (+score >= +pointForNextlevel) {
       setRelevel(true);
       setLevel(level + 1);
