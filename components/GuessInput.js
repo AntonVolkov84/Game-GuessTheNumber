@@ -104,8 +104,8 @@ const rewardedInterstitialFillCells = RewardedInterstitialAd.createForAdRequest(
 });
 
 const GuessInput = ({
-  sound,
   onScoreUpdate,
+  clockStart,
   gameDeviders,
   level,
   hintCount,
@@ -315,6 +315,7 @@ const GuessInput = ({
   };
 
   useEffect(() => {
+    clockStart();
     const unsubscribeLoadedFillCells = rewardedInterstitialFillCells.addAdEventListener(
       RewardedAdEventType.LOADED,
       () => {

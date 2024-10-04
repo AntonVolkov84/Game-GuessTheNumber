@@ -30,7 +30,7 @@ const ButtonText = styled.Text`
   color: whitesmoke;
 `;
 
-export default function StartLevel({ level, gameDeviders, setStart, clockStart }) {
+export default function StartLevel({ level, gameDeviders, setStart }) {
   const levelIndex = Math.floor(level / 3);
   const levelDevider = gameDeviders[levelIndex];
   const { t } = useTranslation();
@@ -61,7 +61,6 @@ export default function StartLevel({ level, gameDeviders, setStart, clockStart }
       <ButtonAgry
         onPress={() => {
           setStart(false);
-          clockStart();
         }}
       >
         <LinearGradient

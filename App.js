@@ -12,6 +12,7 @@ import { StatusBar } from "expo-status-bar";
 import { Audio } from "expo-av";
 import Entypo from "@expo/vector-icons/Entypo";
 import * as NavigationBar from "expo-navigation-bar";
+import * as SecureStore from "expo-secure-store";
 
 const TextLevel = styled.Text`
   color: coral;
@@ -34,22 +35,34 @@ const SoundViewBlock = styled.View`
   right: 5%;
 `;
 
+function savePlayerLevel(key, value) {
+  SecureStore.setItem(key, value);
+}
+function savePlayerTime(key, value) {
+  SecureStore.setItem(key, value);
+}
+function getSavedPlayerLevel(key) {
+  return SecureStore.getItem(key);
+}
+function getSavedPlayerTime(key) {
+  return SecureStore.getItem(key);
+}
+
 export default function App() {
   const [score, setScore] = useState(0);
-  const [start, setStart] = useState(true);
-  const [level, setLevel] = useState(1);
+  const [start, setStart] = useState(false);
+  const [level, setLevel] = useState(getSavedPlayerLevel("level") || 1);
   const pointForNextlevel = [1000];
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
   const [language, setLanguage] = useState(null);
   const [rule, setRule] = useState(false);
-  const [time, setTime] = useState(0);
+  const [time, setTime] = useState(getSavedPlayerTime("time") || 0);
   const funRef = useRef(null);
   const soundRef = useRef(null);
-  const [sound, setSound] = useState();
   const [soundPaused, setSoundPaused] = useState(false);
-  let timer = 0;
+  let timer = time || 0;
 
   const customNavigationBar = async () => {
     await NavigationBar.setBackgroundColorAsync("#1E2322");
@@ -57,10 +70,18 @@ export default function App() {
   };
 
   useEffect(() => {
+    if (level === "1") {
+      setStart(true);
+    }
+  }, [level]);
+  useEffect(() => {
     customNavigationBar();
     if (+score >= +pointForNextlevel) {
       setRelevel(true);
-      setLevel(level + 1);
+      const newLevel = Number(level) + Number(13);
+      savePlayerLevel("level", `${newLevel}`);
+      savePlayerTime("time", `${time}`);
+      setLevel(newLevel);
       setScore(0);
     }
   }, [score]);
@@ -77,7 +98,15 @@ export default function App() {
 
   if (level > 8) {
     clearInterval(funRef.current);
-    return <Endlevel time={time} setTime={setTime} setLevel={setLevel} />;
+    return (
+      <Endlevel
+        savePlayerLevel={savePlayerLevel}
+        savePlayerTime={savePlayerTime}
+        time={time}
+        setTime={setTime}
+        setLevel={setLevel}
+      />
+    );
   }
   const clockStart = () => {
     funRef.current = setInterval(() => {
@@ -85,7 +114,7 @@ export default function App() {
       setTime(timer);
     }, 1000);
   };
-
+  console.log("time", time, "level", level);
   return (
     <>
       <StatusBar style="light" />
@@ -99,7 +128,7 @@ export default function App() {
             <>
               {start ? (
                 <View>
-                  <StartLevel clockStart={clockStart} setStart={setStart} level={level} gameDeviders={gameDividers} />
+                  <StartLevel setStart={setStart} level={level} gameDeviders={gameDividers} />
                 </View>
               ) : (
                 <View style={styles.container}>
@@ -136,7 +165,7 @@ export default function App() {
                         )}
                       </SoundViewBlock>
                       <GuessInput
-                        sound={sound}
+                        clockStart={clockStart}
                         time={time}
                         setTime={setTime}
                         score={score}

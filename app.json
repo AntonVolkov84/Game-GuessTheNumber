@@ -2,7 +2,7 @@
   "expo": {
     "name": "Combine numbers",
     "slug": "GuessTheNumber",
-    "version": "1.1.3",
+    "version": "1.1.7",
     "orientation": "portrait",
     "icon": "./assets/Logo.png",
     "userInterfaceStyle": "light",
@@ -31,7 +31,8 @@
           "androidAppId": "ca-app-pub-9267417700367649~2730067780",
           "userTrackingUsageDescription": "This identifier will be used to deliver personalized ads to you."
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "extra": {
       "eas": {

@@ -59,6 +59,7 @@ const RuleBlockTextInfo = styled.Text`
 
 export default function Rule({ setRule }) {
   const { t } = useTranslation();
+
   return (
     <LinearGradient
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
@@ -96,7 +97,13 @@ export default function Rule({ setRule }) {
             justifyContent: "center",
           }}
         >
-          <ButtonText onPress={() => setRule(true)}>{t("Rule button")}</ButtonText>
+          <ButtonText
+            onPress={() => {
+              setRule(true);
+            }}
+          >
+            {t("Rule button")}
+          </ButtonText>
         </LinearGradient>
       </ButtonAgryLanguage>
     </LinearGradient>
