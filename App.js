@@ -78,7 +78,8 @@ export default function App() {
     customNavigationBar();
     if (+score >= +pointForNextlevel) {
       setRelevel(true);
-      const newLevel = Number(level) + Number(13);
+      const newLevel = Number(level) + Number(1);
+      console.log("console from useEffect", newLevel, "Time =>", time);
       savePlayerLevel("level", `${newLevel}`);
       savePlayerTime("time", `${time}`);
       setLevel(newLevel);

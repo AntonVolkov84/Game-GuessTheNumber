@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, TouchableOpacity, Text, Alert, StyleSheet, Image } from "react-native";
+import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,6 @@ import {
   RewardedInterstitialAd,
   TestIds,
 } from "react-native-google-mobile-ads";
-import { Audio } from "expo-av";
 
 const TextLevel = styled.Text`
   color: coral;
