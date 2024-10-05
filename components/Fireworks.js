@@ -45,6 +45,7 @@ export default function Fireworks({ level, setRelevel, gameDeviders }) {
       <TextExplaining>
         {t("Fireworks rule")} <Text style={{ color: "red" }}>{levelDevider}</Text>
       </TextExplaining>
+      {levelDevider === 2 ? <TextExplaining>{t("Fireworks a")}</TextExplaining> : <></>}
       {levelDevider === 5 ? <TextExplaining>{t("Fireworks b")}</TextExplaining> : <></>}
       {levelDevider === 10 ? <TextExplaining>{t("Fireworks c")}</TextExplaining> : <></>}
       {levelDevider === 3 ? <TextExplaining>{t("Fireworks d")}</TextExplaining> : <></>}

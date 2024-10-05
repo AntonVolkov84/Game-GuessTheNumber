@@ -116,17 +116,21 @@ const GuessInput = ({
   pointForNextlevel,
   soundRef,
   clockRef,
+  setLoadedAdvertisement,
+  loadedAdvertisement,
+  setLoadedAdvertisementFillCells,
+  loadedAdvertisementFillCells,
 }) => {
   const [numbers, setNumbers] = useState(Array.from({ length: 100 }, () => Math.floor(Math.random() * 100)));
   const [selectedIndices, setSelectedIndices] = useState([]);
   const [highlightedIndex, setHighlightedIndex] = useState(null);
   const [highlightedHintIndex, setHighlightedHintIndex] = useState([]);
-  const [hint, setHint] = useState(""); // Состояние для подсказки
+  const [hint, setHint] = useState("");
   const [modal, setModal] = useState(false);
   const levelDevider = gameDeviders[level - 1];
   const { t } = useTranslation();
-  const [loadedAdvertisement, setLoadedAdvertisement] = useState(false);
-  const [loadedAdvertisementFillCells, setLoadedAdvertisementFillCells] = useState(false);
+  const videoADSref = useRef(null);
+  videoADSref.current = loadedAdvertisement;
 
   const handlePress = (index) => {
     if (selectedIndices.includes(index)) {
@@ -258,10 +262,8 @@ const GuessInput = ({
   };
 
   useEffect(() => {
-    console.log("Clock", clockRef.current);
     if (!clockRef.current) {
       clockStart();
-      console.log("clock in effect");
     }
   }, []);
 
@@ -275,10 +277,12 @@ const GuessInput = ({
       RewardedAdEventType.LOADED,
       () => {
         setLoadedAdvertisementFillCells(true);
+        console.log("setLoadedAdvertisementFillCells");
       }
     );
     const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(RewardedAdEventType.LOADED, () => {
       setLoadedAdvertisement(true);
+      console.log("setLoadedAdvertisement");
     });
     const unsubscribeEarnedFillCells = rewardedInterstitialFillCells.addAdEventListener(
       RewardedAdEventType.EARNED_REWARD,
@@ -297,7 +301,7 @@ const GuessInput = ({
       setLoadedAdvertisement(false);
       rewardedInterstitial.load();
     });
-
+    console.log(loadedAdvertisement, loadedAdvertisementFillCells);
     rewardedInterstitial.load();
     rewardedInterstitialFillCells.load();
     return () => {
@@ -365,7 +369,7 @@ const GuessInput = ({
                 <ModalButtonText>{t("GuessModal buttoneject")}</ModalButtonText>
               </LinearGradient>
             </ModalButton>
-            {loadedAdvertisement ? (
+            {videoADSref.current ? (
               <ModalButton
                 onPress={() => {
                   rewardedInterstitial.show();

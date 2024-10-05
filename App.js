@@ -32,7 +32,7 @@ const SoundViewBlock = styled.View`
   flex-direction: row;
   position: absolute;
   width: fit-content;
-  height: 20px;
+  height: 30px;
   top: 5%;
   right: 5%;
 `;
@@ -71,6 +71,8 @@ export default function App() {
   const [language, setLanguage] = useState(getSavedPlayerLanguage("lng") || null);
   const [rule, setRule] = useState(false);
   const [time, setTime] = useState(getSavedPlayerTime("time") || 0);
+  const [loadedAdvertisement, setLoadedAdvertisement] = useState(false);
+  const [loadedAdvertisementFillCells, setLoadedAdvertisementFillCells] = useState(false);
   const clockRef = useRef(null);
   const soundRef = useRef(null);
   const [soundPaused, setSoundPaused] = useState(false);
@@ -78,7 +80,7 @@ export default function App() {
 
   const customNavigationBar = async () => {
     await NavigationBar.setBackgroundColorAsync("#1E2322");
-    await NavigationBarButtonStyle("light");
+    await NavigationBar.setButtonStyleAsync("light");
   };
 
   useEffect(() => {
@@ -189,6 +191,8 @@ export default function App() {
                         )}
                       </SoundViewBlock>
                       <GuessInput
+                        loadedAdvertisement={loadedAdvertisement}
+                        setLoadedAdvertisement={setLoadedAdvertisement}
                         clockRef={clockRef}
                         playSound={playSound}
                         setLanguage={setLanguage}
@@ -203,6 +207,8 @@ export default function App() {
                         level={level}
                         gameDeviders={gameDividers}
                         soundRef={soundRef}
+                        loadedAdvertisementFillCells={loadedAdvertisementFillCells}
+                        setLoadedAdvertisementFillCells={setLoadedAdvertisementFillCells}
                       />
                     </LinearGradient>
                   )}
