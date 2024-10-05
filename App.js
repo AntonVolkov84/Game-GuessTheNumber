@@ -11,6 +11,8 @@ import Endlevel from "./components/Endlevel";
 import { StatusBar } from "expo-status-bar";
 import { Audio } from "expo-av";
 import Entypo from "@expo/vector-icons/Entypo";
+import i18next from "./i18next";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SecureStore from "expo-secure-store";
 
@@ -35,16 +37,26 @@ const SoundViewBlock = styled.View`
   right: 5%;
 `;
 
+const setLng = (lng) => {
+  i18next.changeLanguage(lng);
+};
+
 function savePlayerLevel(key, value) {
   SecureStore.setItem(key, value);
 }
 function savePlayerTime(key, value) {
   SecureStore.setItem(key, value);
 }
+function savePlayerLanguage(key, value) {
+  SecureStore.setItem(key, value);
+}
 function getSavedPlayerLevel(key) {
   return SecureStore.getItem(key);
 }
 function getSavedPlayerTime(key) {
+  return SecureStore.getItem(key);
+}
+function getSavedPlayerLanguage(key) {
   return SecureStore.getItem(key);
 }
 
@@ -56,10 +68,10 @@ export default function App() {
   const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
-  const [language, setLanguage] = useState(null);
+  const [language, setLanguage] = useState(getSavedPlayerLanguage("lng") || null);
   const [rule, setRule] = useState(false);
   const [time, setTime] = useState(getSavedPlayerTime("time") || 0);
-  const funRef = useRef(null);
+  const clockRef = useRef(null);
   const soundRef = useRef(null);
   const [soundPaused, setSoundPaused] = useState(false);
   let timer = time || 0;
@@ -75,11 +87,16 @@ export default function App() {
     }
   }, [level]);
   useEffect(() => {
+    if (language) {
+      const lng = getSavedPlayerLanguage("lng");
+      setLng(lng);
+    }
+  }, [language]);
+  useEffect(() => {
     customNavigationBar();
     if (+score >= +pointForNextlevel) {
       setRelevel(true);
       const newLevel = Number(level) + Number(1);
-      console.log("console from useEffect", newLevel, "Time =>", time);
       savePlayerLevel("level", `${newLevel}`);
       savePlayerTime("time", `${time}`);
       setLevel(newLevel);
@@ -98,7 +115,7 @@ export default function App() {
   };
 
   if (level > 8) {
-    clearInterval(funRef.current);
+    clearInterval(clockRef.current);
     return (
       <Endlevel
         savePlayerLevel={savePlayerLevel}
@@ -106,21 +123,21 @@ export default function App() {
         time={time}
         setTime={setTime}
         setLevel={setLevel}
+        clockRef={clockRef}
       />
     );
   }
   const clockStart = () => {
-    funRef.current = setInterval(() => {
+    clockRef.current = setInterval(() => {
       timer++;
       setTime(timer);
     }, 1000);
   };
-  console.log("time", time, "level", level);
   return (
     <>
       <StatusBar style="light" />
       {!language ? (
-        <Language setLanguage={setLanguage} playSound={playSound} />
+        <Language savePlayerLanguage={savePlayerLanguage} setLanguage={setLanguage} />
       ) : (
         <>
           {!rule ? (
@@ -143,10 +160,17 @@ export default function App() {
                       style={{ height: "100%", width: "100%", padding: 10, paddingTop: "5%" }}
                     >
                       <SoundViewBlock>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setLanguage(null);
+                            setScore(0);
+                          }}
+                        >
+                          <MaterialIcons name="language" size={24} color="#c7b22e" style={{ marginRight: 30 }} />
+                        </TouchableOpacity>
                         {soundPaused ? (
                           <TouchableOpacity
                             onPress={() => {
-                              console.log("Sound go");
                               setSoundPaused(false);
                               soundRef.current.playAsync();
                             }}
@@ -156,7 +180,6 @@ export default function App() {
                         ) : (
                           <TouchableOpacity
                             onPress={() => {
-                              console.log("paused");
                               setSoundPaused(true);
                               soundRef.current.pauseAsync();
                             }}
@@ -166,6 +189,9 @@ export default function App() {
                         )}
                       </SoundViewBlock>
                       <GuessInput
+                        clockRef={clockRef}
+                        playSound={playSound}
+                        setLanguage={setLanguage}
                         clockStart={clockStart}
                         time={time}
                         setTime={setTime}
@@ -176,6 +202,7 @@ export default function App() {
                         onScoreUpdate={handleScoreUpdate}
                         level={level}
                         gameDeviders={gameDividers}
+                        soundRef={soundRef}
                       />
                     </LinearGradient>
                   )}

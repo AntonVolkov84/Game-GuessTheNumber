@@ -1,4 +1,4 @@
-import { View, FlatList, Image } from "react-native";
+import { View, FlatList, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { LanguageResources } from "../i18next.js";
 import i18next from "../i18next.js";
@@ -13,19 +13,20 @@ const ButtonAgryLanguage = styled.TouchableOpacity`
   border-radius: 28px;
   margin-top: 50px;
 `;
+
 const ButtonLanguage = styled.TouchableOpacity`
   width: 150px;
   height: 50px;
   margin: 0 auto;
   border-radius: 28px;
-  margin-top: 40%;
+  margin-top: 5%;
 `;
 const ButtonText = styled.Text`
   color: whitesmoke;
   font-size: 15px;
 `;
 
-export default function Language({ setLanguage, playSound }) {
+export default function Language({ setLanguage, savePlayerLanguage }) {
   const [visible, setVisible] = useState(false);
   const images = {
     en: require("../assets/england.png"),
@@ -34,6 +35,7 @@ export default function Language({ setLanguage, playSound }) {
   };
 
   const changeLng = (lng) => {
+    savePlayerLanguage("lng", `${lng}`);
     i18next.changeLanguage(lng);
     setVisible(false);
     setLanguage(true);
@@ -58,33 +60,50 @@ export default function Language({ setLanguage, playSound }) {
             <FlatList
               data={Object.keys(LanguageResources)}
               renderItem={({ item }) => (
-                <ButtonLanguage
-                  onPress={() => {
-                    changeLng(item);
-                  }}
-                >
-                  <LinearGradient
-                    colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
-                    start={{ x: 0.0, y: 0.0 }}
-                    end={{ x: 1.0, y: 1.0 }}
+                <View style={{ marginTop: "15%" }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      changeLng(item);
+                    }}
                     style={{
-                      height: "100%",
-                      width: "100%",
-                      padding: 10,
-                      overflow: "hidden",
-                      borderRadius: 30,
-                      alignItems: "center",
+                      width: 100,
+                      height: 100,
+                      objectFit: "cover",
+                      borderRadius: 5,
                       justifyContent: "center",
+                      alignSelf: "center",
                     }}
                   >
-                    <View style={{ flexDirection: "row", justifyContent: "center", gap: 10, alignItems: "center" }}>
-                      <View style={{ width: 30, height: 30, borderRadius: 5 }}>
-                        <Image source={images[item]}></Image>
+                    <Image style={{ width: "100%", height: "100%", objectFit: "cover" }} source={images[item]}></Image>
+                  </TouchableOpacity>
+                  <ButtonLanguage
+                    onPress={() => {
+                      changeLng(item);
+                    }}
+                  >
+                    <LinearGradient
+                      colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
+                      start={{ x: 0.0, y: 0.0 }}
+                      end={{ x: 1.0, y: 1.0 }}
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        padding: 10,
+                        overflow: "hidden",
+                        borderRadius: 30,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <View style={{ flexDirection: "row", justifyContent: "center", gap: 10, alignItems: "center" }}>
+                        <View style={{ width: 30, height: 30, borderRadius: 5 }}>
+                          <Image source={images[item]}></Image>
+                        </View>
+                        <ButtonText>{languageList[item].nativeName}</ButtonText>
                       </View>
-                      <ButtonText>{languageList[item].nativeName}</ButtonText>
-                    </View>
-                  </LinearGradient>
-                </ButtonLanguage>
+                    </LinearGradient>
+                  </ButtonLanguage>
+                </View>
               )}
             />
           </LinearGradient>
@@ -103,7 +122,6 @@ export default function Language({ setLanguage, playSound }) {
           <ButtonAgryLanguage
             onPress={() => {
               setVisible(true);
-              playSound();
             }}
           >
             <LinearGradient

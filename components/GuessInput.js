@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+
 import {
   AdEventType,
   BannerAd,
@@ -104,6 +105,7 @@ const rewardedInterstitialFillCells = RewardedInterstitialAd.createForAdRequest(
 
 const GuessInput = ({
   onScoreUpdate,
+  playSound,
   clockStart,
   gameDeviders,
   level,
@@ -112,6 +114,8 @@ const GuessInput = ({
   score,
   time,
   pointForNextlevel,
+  soundRef,
+  clockRef,
 }) => {
   const [numbers, setNumbers] = useState(Array.from({ length: 100 }, () => Math.floor(Math.random() * 100)));
   const [selectedIndices, setSelectedIndices] = useState([]);
@@ -126,70 +130,26 @@ const GuessInput = ({
 
   const handlePress = (index) => {
     if (selectedIndices.includes(index)) {
-      // Удаляем индекс, если он уже выбран
       setSelectedIndices(selectedIndices.filter((i) => i !== index));
     } else {
-      // Добавляем индекс в выбранные
       const newSelectedIndices = [...selectedIndices, index];
       setSelectedIndices(newSelectedIndices);
-
-      // Проверяем, если выбрано 2 ячейки
       if (newSelectedIndices.length === 2) {
         const [firstIndex, secondIndex] = newSelectedIndices.sort((a, b) => a - b);
-
-        // Получаем координаты ячеек
         const firstRow = Math.floor(firstIndex / 10);
         const firstCol = firstIndex % 10;
         const secondRow = Math.floor(secondIndex / 10);
         const secondCol = secondIndex % 10;
-
-        // Проверяем, если ячейки находятся в одной вертикали, горизонтали или диагонали
         const isSameRow = firstRow === secondRow;
         const isSameCol = firstCol === secondCol;
         const isDiagonal = Math.abs(firstRow - secondRow) === Math.abs(firstCol - secondCol);
-
         if (isSameRow || isSameCol || isDiagonal) {
-          // Проверяем наличие препятствий между выбранными ячейками
-          let hasObstacle = false;
-          if (isSameRow) {
-            // Проверяем по горизонтали
-            for (let col = Math.min(firstCol, secondCol) + 1; col < Math.max(firstCol, secondCol); col++) {
-              if (numbers[firstRow * 10 + col] !== null) {
-                hasObstacle = true;
-                break;
-              }
-            }
-          } else if (isSameCol) {
-            // Проверяем по вертикали
-            for (let row = Math.min(firstRow, secondRow) + 1; row < Math.max(firstRow, secondRow); row++) {
-              if (numbers[row * 10 + firstCol] !== null) {
-                hasObstacle = true;
-                break;
-              }
-            }
-          } else if (isDiagonal) {
-            // Проверяем по диагонали
-            const rowStep = firstRow < secondRow ? 1 : -1;
-            const colStep = firstCol < secondCol ? 1 : -1;
-            let row = firstRow + rowStep;
-            let col = firstCol + colStep;
-
-            while (row !== secondRow && col !== secondCol) {
-              if (numbers[row * 10 + col] !== null) {
-                hasObstacle = true;
-                break;
-              }
-              row += rowStep;
-              col += colStep;
-            }
-          }
-
+          let hasObstacle = !isPathClear(firstIndex, secondIndex);
           if (hasObstacle) {
             setHighlightedIndex(index);
             setTimeout(() => {
               setHighlightedIndex(null);
             }, 500);
-            // Если есть препятствие, сбрасываем выбранные ячейки
             setSelectedIndices([]);
           } else {
             const sum = newSelectedIndices.reduce((acc, curr) => acc + (numbers[curr] || 0), 0);
@@ -199,18 +159,15 @@ const GuessInput = ({
               setTimeout(() => {
                 setHighlightedIndex(null);
               }, 500);
-              // Если ячейки не в одной линии, сбрасываем выбор
               setSelectedIndices([]);
             }
             if (resultOfMathPlayer === 0) {
-              onScoreUpdate(sum); // Обновляем очки
-              // Заменяем значения на пустые
+              onScoreUpdate(sum);
               const updatedNumbers = [...numbers];
               newSelectedIndices.forEach((i) => (updatedNumbers[i] = null));
               setNumbers(updatedNumbers);
               setHighlightedHintIndex([]);
             }
-            // Сбрасываем выбранные ячейки
             setSelectedIndices([]);
           }
         } else {
@@ -218,7 +175,6 @@ const GuessInput = ({
           setTimeout(() => {
             setHighlightedIndex(null);
           }, 500);
-          // Если ячейки не в одной линии, сбрасываем выбор
           setSelectedIndices([]);
         }
       }
@@ -232,20 +188,16 @@ const GuessInput = ({
     setHintCount(hintCount - 1);
     for (let i = 0; i < numbers.length; i++) {
       for (let j = i + 1; j < numbers.length; j++) {
-        // Проверяем, что сумма значений делится на 10
         const hintResult = numbers[i] + numbers[j];
         if (numbers[i] !== null && numbers[j] !== null && hintResult % levelDevider === 0) {
-          // Проверяем, есть ли препятствия между ячейками
           if (isPathClear(i, j)) {
-            // Устанавливаем индексы ячеек для подсветки
             setHighlightedHintIndex([i, j]);
-            return; // Выходим из функции после нахождения первой пары
+            return;
           }
         }
       }
     }
-    // Если подходящих ячеек не найдено
-    setHint("Совпадений по числам нет, заполните пустые поля"); // Сообщение, если подсказок больше нет
+    setHint("Совпадений по числам нет, заполните пустые поля");
   };
 
   const isPathClear = (firstIndex, secondIndex) => {
@@ -253,17 +205,12 @@ const GuessInput = ({
     const firstCol = firstIndex % 10;
     const secondRow = Math.floor(secondIndex / 10);
     const secondCol = secondIndex % 10;
-
-    // Проверяем, если ячейки находятся в одной вертикали, горизонтали или диагонали
     const isSameRow = firstRow === secondRow;
     const isSameCol = firstCol === secondCol;
     const isDiagonal = Math.abs(firstRow - secondRow) === Math.abs(firstCol - secondCol);
-
     if (isSameRow || isSameCol || isDiagonal) {
-      // Проверяем наличие препятствий между выбранными ячейками
       let hasObstacle = false;
       if (isSameRow) {
-        // Проверяем по горизонтали
         for (let col = Math.min(firstCol, secondCol) + 1; col < Math.max(firstCol, secondCol); col++) {
           if (numbers[firstRow * 10 + col] !== null) {
             hasObstacle = true;
@@ -271,7 +218,6 @@ const GuessInput = ({
           }
         }
       } else if (isSameCol) {
-        // Проверяем по вертикали
         for (let row = Math.min(firstRow, secondRow) + 1; row < Math.max(firstRow, secondRow); row++) {
           if (numbers[row * 10 + firstCol] !== null) {
             hasObstacle = true;
@@ -279,7 +225,6 @@ const GuessInput = ({
           }
         }
       } else if (isDiagonal) {
-        // Проверяем по диагонали
         const rowStep = firstRow < secondRow ? 1 : -1;
         const colStep = firstCol < secondCol ? 1 : -1;
         let row = firstRow + rowStep;
@@ -309,22 +254,31 @@ const GuessInput = ({
   };
 
   const getRandomNumber = () => {
-    // Генерируем случайное число от 1 до 100
     return Math.floor(Math.random() * 100) + 1;
   };
 
   useEffect(() => {
-    clockStart();
+    console.log("Clock", clockRef.current);
+    if (!clockRef.current) {
+      clockStart();
+      console.log("clock in effect");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!soundRef.current) {
+      playSound();
+    }
+  }, []);
+  useEffect(() => {
     const unsubscribeLoadedFillCells = rewardedInterstitialFillCells.addAdEventListener(
       RewardedAdEventType.LOADED,
       () => {
         setLoadedAdvertisementFillCells(true);
-        console.log("fill cells LOAD ADS");
       }
     );
     const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(RewardedAdEventType.LOADED, () => {
       setLoadedAdvertisement(true);
-      console.log("ADS to hints load");
     });
     const unsubscribeEarnedFillCells = rewardedInterstitialFillCells.addAdEventListener(
       RewardedAdEventType.EARNED_REWARD,

@@ -24,7 +24,7 @@ const ButtonText = styled.Text`
   color: whitesmoke;
 `;
 
-export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, savePlayerTime }) {
+export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, savePlayerTime, clockRef }) {
   const { t } = useTranslation();
 
   const getFullTime = () => {
@@ -74,7 +74,8 @@ export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, sav
               setLevel(1);
               savePlayerLevel("level", "1");
               savePlayerTime("time", `0`);
-              setTime(0);
+              setTime("0");
+              clockRef.current = null;
             }}
           >
             {t("Endlevel button")}
