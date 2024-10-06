@@ -52,7 +52,7 @@ export default function StartLevel({ level, gameDeviders, setStart }) {
         autoPlay
         style={{
           width: "100%",
-          height: 450,
+          aspectRatio: 1 / 1,
           backgroundColor: "#1E2322",
           marginBottom: 20,
         }}

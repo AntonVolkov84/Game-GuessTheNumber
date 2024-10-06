@@ -78,13 +78,13 @@ const TextScore = styled.Text`
   color: coral;
   align-self: center;
   font-size: 22px;
-  margin-top: 15px;
+  margin-top: 1%;
 `;
 const TextTime = styled.Text`
   color: coral;
   align-self: center;
   font-size: 22px;
-  margin-top: 15px;
+  margin-top: 1%;
 `;
 const ModalText = styled.Text`
   color: coral;
@@ -277,12 +277,10 @@ const GuessInput = ({
       RewardedAdEventType.LOADED,
       () => {
         setLoadedAdvertisementFillCells(true);
-        console.log("setLoadedAdvertisementFillCells");
       }
     );
     const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(RewardedAdEventType.LOADED, () => {
       setLoadedAdvertisement(true);
-      console.log("setLoadedAdvertisement");
     });
     const unsubscribeEarnedFillCells = rewardedInterstitialFillCells.addAdEventListener(
       RewardedAdEventType.EARNED_REWARD,
@@ -301,7 +299,6 @@ const GuessInput = ({
       setLoadedAdvertisement(false);
       rewardedInterstitial.load();
     });
-    console.log(loadedAdvertisement, loadedAdvertisementFillCells);
     rewardedInterstitial.load();
     rewardedInterstitialFillCells.load();
     return () => {

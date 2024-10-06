@@ -119,14 +119,18 @@ export default function App() {
   if (level > 8) {
     clearInterval(clockRef.current);
     return (
-      <Endlevel
-        savePlayerLevel={savePlayerLevel}
-        savePlayerTime={savePlayerTime}
-        time={time}
-        setTime={setTime}
-        setLevel={setLevel}
-        clockRef={clockRef}
-      />
+      <>
+        <StatusBar style="light" />
+        <Endlevel
+          setRelevel={setRelevel}
+          savePlayerLevel={savePlayerLevel}
+          savePlayerTime={savePlayerTime}
+          time={time}
+          setTime={setTime}
+          setLevel={setLevel}
+          clockRef={clockRef}
+        />
+      </>
     );
   }
   const clockStart = () => {

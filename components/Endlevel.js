@@ -24,7 +24,7 @@ const ButtonText = styled.Text`
   color: whitesmoke;
 `;
 
-export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, savePlayerTime, clockRef }) {
+export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, savePlayerTime, clockRef, setRelevel }) {
   const { t } = useTranslation();
 
   const getFullTime = () => {
@@ -44,7 +44,7 @@ export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, sav
         autoPlay
         style={{
           width: "100%",
-          height: 450,
+          aspectRatio: 1 / 1,
           backgroundColor: "#1E2322",
           overflow: "hidden",
           marginBottom: 20,
@@ -72,6 +72,7 @@ export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, sav
           <ButtonText
             onPress={() => {
               setLevel(1);
+              setRelevel(false);
               savePlayerLevel("level", "1");
               savePlayerTime("time", `0`);
               setTime("0");
