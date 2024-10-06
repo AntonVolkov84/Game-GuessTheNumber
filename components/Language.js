@@ -60,21 +60,19 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
             <FlatList
               data={Object.keys(LanguageResources)}
               renderItem={({ item }) => (
-                <View style={{ marginTop: "15%" }}>
+                <View style={{ marginTop: "10%" }}>
                   <TouchableOpacity
                     onPress={() => {
                       changeLng(item);
                     }}
                     style={{
-                      width: 100,
-                      height: 100,
-                      objectFit: "cover",
-                      borderRadius: 5,
+                      width: "30%",
+                      height: 200,
                       justifyContent: "center",
                       alignSelf: "center",
                     }}
                   >
-                    <Image style={{ width: "100%", height: "100%", objectFit: "cover" }} source={images[item]}></Image>
+                    <Image style={{ width: "100%", height: "100%" }} source={images[item]}></Image>
                   </TouchableOpacity>
                   <ButtonLanguage
                     onPress={() => {
@@ -95,8 +93,8 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
                         justifyContent: "center",
                       }}
                     >
-                      <View style={{ flexDirection: "row", justifyContent: "center", gap: 10, alignItems: "center" }}>
-                        <View style={{ width: 30, height: 30, borderRadius: 5 }}>
+                      <View style={{ flexDirection: "row", justifyContent: "center", gap: 15, alignItems: "center" }}>
+                        <View style={{ width: "25%", height: 30, borderRadius: 5 }}>
                           <Image source={images[item]}></Image>
                         </View>
                         <ButtonText>{languageList[item].nativeName}</ButtonText>

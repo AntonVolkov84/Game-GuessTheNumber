@@ -31,7 +31,7 @@ const RuleBlockInfo = styled.View`
   align-items: center;
 `;
 const RuleBlockImage = styled.Image`
-  width: 50%;
+  width: 47%;
   height: 100%;
   aspect-ratio: 1;
   border-radius: 18px;
