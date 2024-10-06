@@ -16,25 +16,24 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SecureStore from "expo-secure-store";
 
-const TextLevel = styled.Text`
-  color: coral;
-  align-self: center;
-  font-size: 22px;
-  margin-bottom: 15px;
-`;
-const TextScore = styled.Text`
-  color: coral;
-  align-self: center;
-  font-size: 22px;
-  margin-top: 15px;
-`;
 const SoundViewBlock = styled.View`
   flex-direction: row;
   position: absolute;
-  width: fit-content;
-  height: 30px;
+  width: 30%;
+  height: 4%;
   top: 5%;
   right: 5%;
+`;
+const MusicAtrubation = styled.Text`
+  color: #c7b22e;
+  justify-self: center;
+  text-align: center;
+  margin-right: 4%;
+`;
+const BlockButton = styled.View`
+  flex-direction: row;
+  position: absolute;
+  right: 0;
 `;
 
 const setLng = (lng) => {
@@ -166,33 +165,36 @@ export default function App() {
                       style={{ height: "100%", width: "100%", padding: 10, paddingTop: "5%" }}
                     >
                       <SoundViewBlock>
-                        <TouchableOpacity
-                          onPress={() => {
-                            setLanguage(null);
-                            setScore(0);
-                          }}
-                        >
-                          <MaterialIcons name="language" size={24} color="#c7b22e" style={{ marginRight: 30 }} />
-                        </TouchableOpacity>
-                        {soundPaused ? (
+                        {soundPaused ? null : <MusicAtrubation>Pufino - Thoughtful (freetouse.com)</MusicAtrubation>}
+                        <BlockButton>
+                          {soundPaused ? (
+                            <TouchableOpacity
+                              onPress={() => {
+                                setSoundPaused(false);
+                                soundRef.current.playAsync();
+                              }}
+                            >
+                              <Entypo name="sound" size={24} color="#c7b22e" />
+                            </TouchableOpacity>
+                          ) : (
+                            <TouchableOpacity
+                              onPress={() => {
+                                setSoundPaused(true);
+                                soundRef.current.pauseAsync();
+                              }}
+                            >
+                              <Entypo name="sound-mute" size={24} color="#c7b22e" />
+                            </TouchableOpacity>
+                          )}
                           <TouchableOpacity
                             onPress={() => {
-                              setSoundPaused(false);
-                              soundRef.current.playAsync();
+                              setLanguage(null);
+                              setScore(0);
                             }}
                           >
-                            <Entypo name="sound" size={24} color="#c7b22e" />
+                            <MaterialIcons name="language" size={24} color="#c7b22e" style={{ marginLeft: 30 }} />
                           </TouchableOpacity>
-                        ) : (
-                          <TouchableOpacity
-                            onPress={() => {
-                              setSoundPaused(true);
-                              soundRef.current.pauseAsync();
-                            }}
-                          >
-                            <Entypo name="sound-mute" size={24} color="#c7b22e" />
-                          </TouchableOpacity>
-                        )}
+                        </BlockButton>
                       </SoundViewBlock>
                       <GuessInput
                         loadedAdvertisement={loadedAdvertisement}
