@@ -100,7 +100,7 @@ export default function App() {
     customNavigationBar();
     if (+score >= +pointForNextlevel) {
       setRelevel(true);
-      const newLevel = Number(level) + Number(15);
+      const newLevel = Number(level) + Number(1);
       savePlayerLevel("level", `${newLevel}`);
       savePlayerTime("time", `${time}`);
       setLevel(newLevel);
