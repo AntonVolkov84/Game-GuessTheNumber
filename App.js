@@ -74,6 +74,7 @@ export default function App() {
   const [time, setTime] = useState(getSavedPlayerTime("time") || 0);
   const [loadedAdvertisement, setLoadedAdvertisement] = useState(false);
   const [loadedAdvertisementFillCells, setLoadedAdvertisementFillCells] = useState(false);
+
   const clockRef = useRef(null);
   const soundRef = useRef(null);
   const [soundPaused, setSoundPaused] = useState(false);
@@ -99,7 +100,7 @@ export default function App() {
     customNavigationBar();
     if (+score >= +pointForNextlevel) {
       setRelevel(true);
-      const newLevel = Number(level) + Number(1);
+      const newLevel = Number(level) + Number(15);
       savePlayerLevel("level", `${newLevel}`);
       savePlayerTime("time", `${time}`);
       setLevel(newLevel);
@@ -117,20 +118,22 @@ export default function App() {
     setScore(score + points);
   };
 
+  const goToBegining = () => {
+    setLevel(1);
+    setRelevel(false);
+    setRule(true);
+    savePlayerLevel("level", "1");
+    setTime("0");
+    savePlayerTime("time", "0");
+    clockRef.current = null;
+  };
+
   if (level > 8) {
     clearInterval(clockRef.current);
     return (
       <>
         <StatusBar style="light" />
-        <Endlevel
-          setRelevel={setRelevel}
-          savePlayerLevel={savePlayerLevel}
-          savePlayerTime={savePlayerTime}
-          time={time}
-          setTime={setTime}
-          setLevel={setLevel}
-          clockRef={clockRef}
-        />
+        <Endlevel goToBegining={goToBegining} time={time} />
       </>
     );
   }

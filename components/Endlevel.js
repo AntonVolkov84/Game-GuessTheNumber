@@ -24,7 +24,7 @@ const ButtonText = styled.Text`
   color: whitesmoke;
 `;
 
-export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, savePlayerTime, clockRef, setRelevel }) {
+export default function Endlevel({ goToBegining, time }) {
   const { t } = useTranslation();
 
   const getFullTime = () => {
@@ -32,6 +32,7 @@ export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, sav
     const sec = time % 60;
     return `${min} ${t("Endlevel min")} : ${sec} ${t("Endlevel sec")}`;
   };
+
   return (
     <LinearGradient
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
@@ -54,7 +55,11 @@ export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, sav
       <EndlevelBlockText>
         {t("Endlevel info")} {getFullTime()}
       </EndlevelBlockText>
-      <ButtonAgry onPress={() => setLevel(1)}>
+      <ButtonAgry
+        onPress={() => {
+          goToBegining();
+        }}
+      >
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
           start={{ x: 0.0, y: 0.0 }}
@@ -69,18 +74,7 @@ export default function Endlevel({ setLevel, time, setTime, savePlayerLevel, sav
             justifyContent: "center",
           }}
         >
-          <ButtonText
-            onPress={() => {
-              setLevel(1);
-              setRelevel(false);
-              savePlayerLevel("level", "1");
-              savePlayerTime("time", `0`);
-              setTime("0");
-              clockRef.current = null;
-            }}
-          >
-            {t("Endlevel button")}
-          </ButtonText>
+          <ButtonText>{t("Endlevel button")}</ButtonText>
         </LinearGradient>
       </ButtonAgry>
     </LinearGradient>

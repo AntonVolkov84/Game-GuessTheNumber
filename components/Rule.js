@@ -27,6 +27,7 @@ const RuleBlock = styled.View`
 const RuleBlockInfo = styled.View`
   flex-direction: row;
   height: 12%;
+  margin-top: 2%;
   justify-content: center;
   align-items: center;
 `;
