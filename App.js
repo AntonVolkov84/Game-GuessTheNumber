@@ -19,14 +19,16 @@ import * as SecureStore from "expo-secure-store";
 const SoundViewBlock = styled.View`
   flex-direction: row;
   position: absolute;
-  width: 30%;
+  width: 95%;
   height: 4%;
   top: 5%;
   right: 5%;
+  align-items: center;
 `;
 const MusicAtrubation = styled.Text`
   color: #c7b22e;
-  justify-self: center;
+  font-size: 6px;
+  text-justify: center;
   text-align: center;
   margin-right: 4%;
 `;
@@ -165,7 +167,11 @@ export default function App() {
                       style={{ height: "100%", width: "100%", padding: 10, paddingTop: "5%" }}
                     >
                       <SoundViewBlock>
-                        {soundPaused ? null : <MusicAtrubation>Pufino - Thoughtful (freetouse.com)</MusicAtrubation>}
+                        {soundPaused ? null : (
+                          <View>
+                            <MusicAtrubation>Pufino - Thoughtful (freetouse.com)</MusicAtrubation>
+                          </View>
+                        )}
                         <BlockButton>
                           {soundPaused ? (
                             <TouchableOpacity

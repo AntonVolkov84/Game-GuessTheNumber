@@ -67,7 +67,7 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
                     }}
                     style={{
                       width: "30%",
-                      height: 200,
+                      aspectRatio: 1 / 1,
                       justifyContent: "center",
                       alignSelf: "center",
                     }}

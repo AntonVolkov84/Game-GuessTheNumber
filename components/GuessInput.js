@@ -16,7 +16,7 @@ import {
 
 const TextLevel = styled.Text`
   color: coral;
-  margin-top: 5%;
+  margin-top: 6%;
   align-self: center;
   font-size: 22px;
   margin-bottom: 15px;
