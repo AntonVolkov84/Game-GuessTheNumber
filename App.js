@@ -51,7 +51,13 @@ function savePlayerTime(key, value) {
 function savePlayerLanguage(key, value) {
   SecureStore.setItem(key, value);
 }
+function savePlayerHints(key, value) {
+  SecureStore.setItem(key, value);
+}
 function getSavedPlayerLevel(key) {
+  return SecureStore.getItem(key);
+}
+function getSavedPlayerHints(key) {
   return SecureStore.getItem(key);
 }
 function getSavedPlayerTime(key) {
@@ -66,7 +72,7 @@ export default function App() {
   const [start, setStart] = useState(false);
   const [level, setLevel] = useState(getSavedPlayerLevel("level") || 1);
   const pointForNextlevel = [1000];
-  const [hintCount, setHintCount] = useState(2);
+  const [hintCount, setHintCount] = useState(getSavedPlayerHints("hints") || 2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
   const [language, setLanguage] = useState(getSavedPlayerLanguage("lng") || null);
@@ -103,6 +109,7 @@ export default function App() {
       const newLevel = Number(level) + Number(1);
       savePlayerLevel("level", `${newLevel}`);
       savePlayerTime("time", `${time}`);
+      savePlayerHints("hints", `${hintCount}`);
       setLevel(newLevel);
       setScore(0);
     }
