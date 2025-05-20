@@ -15,6 +15,7 @@ import i18next from "./i18next";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SecureStore from "expo-secure-store";
+import { useTranslation } from "react-i18next";
 
 const SoundViewBlock = styled.View`
   flex-direction: row;
@@ -54,6 +55,7 @@ function savePlayerLanguage(key, value) {
 function savePlayerHints(key, value) {
   SecureStore.setItem(key, value);
 }
+
 function getSavedPlayerLevel(key) {
   return SecureStore.getItem(key);
 }
@@ -71,6 +73,7 @@ export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(false);
   const [level, setLevel] = useState(getSavedPlayerLevel("level") || 1);
+  const [mistakes, setMistakes] = useState(0);
   const pointForNextlevel = [1000];
   const [hintCount, setHintCount] = useState(getSavedPlayerHints("hints") || 2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
@@ -80,6 +83,7 @@ export default function App() {
   const [time, setTime] = useState(getSavedPlayerTime("time") || 0);
   const [loadedAdvertisement, setLoadedAdvertisement] = useState(false);
   const [loadedAdvertisementFillCells, setLoadedAdvertisementFillCells] = useState(false);
+  const { t } = useTranslation();
 
   const clockRef = useRef(null);
   const soundRef = useRef(null);
@@ -90,6 +94,21 @@ export default function App() {
     await NavigationBar.setBackgroundColorAsync("#1E2322");
     await NavigationBar.setButtonStyleAsync("light");
   };
+
+  useEffect(() => {
+    if (mistakes == 5) {
+      if (level == 1) {
+        Alert.alert(`${t("AlertMistakesLevelDown1level")}`);
+        setMistakes(0);
+        return setScore(0);
+      }
+      Alert.alert(`${t("AlertMistakesLevelDown")}`);
+      setMistakes(0);
+      savePlayerLevel("level", `${level - 1}`);
+      setScore(0);
+      setLevel(level - 1);
+    }
+  }, [mistakes]);
 
   useEffect(() => {
     if (level === "1") {
@@ -111,6 +130,7 @@ export default function App() {
       savePlayerTime("time", `${time}`);
       savePlayerHints("hints", `${hintCount}`);
       setLevel(newLevel);
+      setMistakes(0);
       setScore(0);
     }
   }, [score]);
@@ -231,6 +251,8 @@ export default function App() {
                         soundRef={soundRef}
                         loadedAdvertisementFillCells={loadedAdvertisementFillCells}
                         setLoadedAdvertisementFillCells={setLoadedAdvertisementFillCells}
+                        setMistakes={setMistakes}
+                        mistakes={mistakes}
                       />
                     </LinearGradient>
                   )}

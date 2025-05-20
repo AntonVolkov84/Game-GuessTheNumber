@@ -32,7 +32,7 @@ const RuleBlockInfo = styled.View`
   align-items: center;
 `;
 const RuleBlockImage = styled.Image`
-  width: 47%;
+  width: 40%;
   height: 100%;
   aspect-ratio: 1;
   border-radius: 18px;
@@ -44,7 +44,7 @@ const RuleBlockText = styled.Text`
   border-radius: 18px;
   color: whitesmoke;
   padding: 5px;
-  font-size: 22px;
+  font-size: 18px;
   text-align: center;
 `;
 const RuleBlockTextInfo = styled.Text`
@@ -54,7 +54,7 @@ const RuleBlockTextInfo = styled.Text`
   border-radius: 18px;
   color: whitesmoke;
   padding: 10px;
-  font-size: 22px;
+  font-size: 18px;
   text-align: center;
 `;
 

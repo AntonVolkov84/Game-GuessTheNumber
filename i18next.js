@@ -7,7 +7,7 @@ import en from "./i18n/en-US.json";
 
 export const LanguageResources = {
   en: { translation: en },
-  ru: { translation: ru },
+  // ru: { translation: ru },
   ua: { translation: ua },
 };
 

@@ -36,5 +36,8 @@
   "Endlevel info": "Все уровни пройдены за",
   "Endlevel button": "Начать сначала",
   "Endlevel min": "мин",
-  "Endlevel sec": "сек"
+  "Endlevel sec": "сек",
+  "AlertMistakesLevelDown": "У Вас много ошибок. Вы возвращаетесь назад",
+  "AlertMistakesLevelDown1level": "У Вас много ошибок",
+  "Mistakes": "Ошибки"
 }

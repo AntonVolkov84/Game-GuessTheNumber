@@ -36,5 +36,8 @@
   "Endlevel info": "All levels completed by",
   "Endlevel button": "Try it first",
   "Endlevel min": "min",
-  "Endlevel sec": "sec"
+  "Endlevel sec": "sec",
+  "AlertMistakesLevelDown": "You have to many mistakes. You are returning!",
+  "AlertMistakesLevelDown1level": "You have to many mistakes.",
+  "Mistakes": "Mistakes"
 }

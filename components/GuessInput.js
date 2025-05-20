@@ -8,7 +8,7 @@ import {
   AdEventType,
   BannerAd,
   BannerAdSize,
-  RewardedAd,
+  InterstitialAd,
   RewardedAdEventType,
   RewardedInterstitialAd,
   TestIds,
@@ -99,7 +99,7 @@ const ModalText = styled.Text`
 const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(TestIds.REWARDED_INTERSTITIAL, {
   requestNonPersonalizedAdsOnly: true,
 });
-const rewardedInterstitialFillCells = RewardedInterstitialAd.createForAdRequest(TestIds.REWARDED_INTERSTITIAL, {
+const rewardedInterstitialFillCells = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
   requestNonPersonalizedAdsOnly: true,
 });
 
@@ -120,6 +120,8 @@ const GuessInput = ({
   loadedAdvertisement,
   setLoadedAdvertisementFillCells,
   loadedAdvertisementFillCells,
+  setMistakes,
+  mistakes,
 }) => {
   const [numbers, setNumbers] = useState(Array.from({ length: 100 }, () => Math.floor(Math.random() * 100)));
   const [selectedIndices, setSelectedIndices] = useState([]);
@@ -154,6 +156,7 @@ const GuessInput = ({
             setTimeout(() => {
               setHighlightedIndex(null);
             }, 500);
+            setMistakes(mistakes + 1);
             setSelectedIndices([]);
           } else {
             const sum = newSelectedIndices.reduce((acc, curr) => acc + (numbers[curr] || 0), 0);
@@ -163,6 +166,7 @@ const GuessInput = ({
               setTimeout(() => {
                 setHighlightedIndex(null);
               }, 500);
+              setMistakes(mistakes + 1);
               setSelectedIndices([]);
             }
             if (resultOfMathPlayer === 0) {
@@ -179,6 +183,7 @@ const GuessInput = ({
           setTimeout(() => {
             setHighlightedIndex(null);
           }, 500);
+          setMistakes(mistakes + 1);
           setSelectedIndices([]);
         }
       }
@@ -260,54 +265,51 @@ const GuessInput = ({
   const getRandomNumber = () => {
     return Math.floor(Math.random() * 100) + 1;
   };
-
   useEffect(() => {
-    if (!clockRef.current) {
-      clockStart();
+    if (mistakes == 5) {
+      fillEmptyCellsWithRandomNumbers();
     }
+  }, [mistakes]);
+  useEffect(() => {
+    if (!clockRef.current) clockStart();
+    if (!soundRef.current) playSound();
   }, []);
 
   useEffect(() => {
-    if (!soundRef.current) {
-      playSound();
-    }
-  }, []);
-  useEffect(() => {
-    const unsubscribeLoadedFillCells = rewardedInterstitialFillCells.addAdEventListener(
-      RewardedAdEventType.LOADED,
-      () => {
-        setLoadedAdvertisementFillCells(true);
-      }
-    );
+    const unsubscribeLoadedFillCells = rewardedInterstitialFillCells.addAdEventListener(AdEventType.LOADED, () => {
+      console.log("Interstitial ad loaded");
+      setLoadedAdvertisementFillCells(true);
+    });
     const unsubscribeLoaded = rewardedInterstitial.addAdEventListener(RewardedAdEventType.LOADED, () => {
       setLoadedAdvertisement(true);
     });
-    const unsubscribeEarnedFillCells = rewardedInterstitialFillCells.addAdEventListener(
-      RewardedAdEventType.EARNED_REWARD,
-      () => {
-        fillEmptyCellsWithRandomNumbers();
-      }
-    );
+
     const unsubscribeCloseFillCells = rewardedInterstitialFillCells.addAdEventListener(AdEventType.CLOSED, () => {
+      console.log("Interstitial ad closed");
       setLoadedAdvertisementFillCells(false);
       rewardedInterstitialFillCells.load();
+      fillEmptyCellsWithRandomNumbers();
     });
     const unsubscribeEarned = rewardedInterstitial.addAdEventListener(RewardedAdEventType.EARNED_REWARD, (reward) => {
+      console.log("rewarded", reward);
       setHintCount(reward.amount);
     });
     const unsubscribeClosed = rewardedInterstitial.addAdEventListener(AdEventType.CLOSED, () => {
       setLoadedAdvertisement(false);
       rewardedInterstitial.load();
     });
+    const unsubscribeError = rewardedInterstitialFillCells.addAdEventListener(AdEventType.ERROR, (error) => {
+      console.log("Ad load error:", error);
+    });
     rewardedInterstitial.load();
     rewardedInterstitialFillCells.load();
     return () => {
       unsubscribeLoaded();
       unsubscribeEarned();
-      unsubscribeEarnedFillCells();
       unsubscribeLoadedFillCells();
       unsubscribeCloseFillCells();
       unsubscribeClosed();
+      unsubscribeError();
     };
   }, []);
 
@@ -491,6 +493,9 @@ const GuessInput = ({
       </TextScore>
       <TextTime>
         {t("Guess time")}: {time}
+      </TextTime>
+      <TextTime>
+        {t("Mistakes")}: {mistakes}
       </TextTime>
       <View style={{ position: "absolute", bottom: 0 }}>
         <BannerAd

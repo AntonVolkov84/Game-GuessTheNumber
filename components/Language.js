@@ -30,7 +30,7 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
   const [visible, setVisible] = useState(false);
   const images = {
     en: require("../assets/england.png"),
-    ru: require("../assets/russia.png"),
+    // ru: require("../assets/russia.png"),
     ua: require("../assets/ukraine.png"),
   };
 
