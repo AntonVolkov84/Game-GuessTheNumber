@@ -1,8 +1,10 @@
-import { View, Text, Image } from "react-native";
-import React from "react";
+import { View, Text, Image, Dimensions } from "react-native";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
+
+const screenHeight = Dimensions.get("window").height;
+const isLowHeight = screenHeight < 700;
 
 const ButtonAgryLanguage = styled.TouchableOpacity`
   width: 150px;
@@ -18,7 +20,7 @@ const ButtonText = styled.Text`
 `;
 const RuleBlock = styled.View`
   flex-direction: row;
-  height: 22%;
+  height: ${isLowHeight ? "20%" : "22%"};
   gap: 10px;
   margin-top: 5%;
   justify-content: center;
@@ -26,13 +28,13 @@ const RuleBlock = styled.View`
 `;
 const RuleBlockInfo = styled.View`
   flex-direction: row;
-  height: 12%;
+  height: 10%;
   margin-top: 2%;
   justify-content: center;
   align-items: center;
 `;
 const RuleBlockImage = styled.Image`
-  width: 40%;
+  width: ${isLowHeight ? "35%" : "40%"};
   height: 100%;
   aspect-ratio: 1;
   border-radius: 18px;
@@ -43,8 +45,8 @@ const RuleBlockText = styled.Text`
   height: content;
   border-radius: 18px;
   color: whitesmoke;
-  padding: 5px;
-  font-size: 18px;
+  padding: 3px;
+  font-size: ${isLowHeight ? "16px" : "18px"};
   text-align: center;
 `;
 const RuleBlockTextInfo = styled.Text`
@@ -54,7 +56,7 @@ const RuleBlockTextInfo = styled.Text`
   border-radius: 18px;
   color: whitesmoke;
   padding: 10px;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 `;
 

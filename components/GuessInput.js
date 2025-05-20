@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
+import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from "react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+
+const screenHeight = Dimensions.get("window").height;
+const isLowHeight = screenHeight < 700;
 
 import {
   AdEventType,
@@ -16,17 +19,17 @@ import {
 
 const TextLevel = styled.Text`
   color: coral;
-  margin-top: 6%;
+  margin-top: ${isLowHeight ? "10px" : "6%"};
   align-self: center;
-  font-size: 22px;
-  margin-bottom: 15px;
+  font-size: ${isLowHeight ? "20px" : "22px"};
+  margin-bottom: ${isLowHeight ? 0 : "10px"};
 `;
 const TextExplaining = styled.Text`
   color: whitesmoke;
   align-self: flex-start;
   justify-content: center;
-  margin-bottom: 15px;
-  font-size: 15px;
+  margin-bottom: ${isLowHeight ? "5px" : "10px"};
+  font-size: ${isLowHeight ? "13px" : "15px"};
   padding-left: 2%;
 `;
 const ButtonAll = styled.View`
@@ -35,17 +38,18 @@ const ButtonAll = styled.View`
   align-items: center;
 `;
 const ButtonAgry = styled.TouchableOpacity`
-  width: 150px;
-  height: 60px;
+  width: ${isLowHeight ? "120px" : "150px"};
+  height: ${isLowHeight ? "35px" : "55px"};
   margin: 0 auto;
   border-radius: 28px;
 `;
 const ButtonText = styled.Text`
   color: whitesmoke;
   text-align: center;
+  font-size: ${isLowHeight ? "13px" : "18px"};
 `;
 const GridBox = styled.View`
-  margin-bottom: 15px;
+  margin-bottom: ${isLowHeight ? "8px" : "10px"};
 `;
 
 const ModalBlock = styled.View`
@@ -73,18 +77,21 @@ const ModalButtonText = styled.Text`
   color: whitesmoke;
   text-align: center;
 `;
-
+const LevelInfo = styled.View`
+  flex-direction: ${isLowHeight ? "row" : "column"};
+  gap: ${isLowHeight ? "15px" : 0};
+  justify-content: center;
+  align-items: center;
+`;
 const TextScore = styled.Text`
   color: coral;
   align-self: center;
-  font-size: 22px;
-  margin-top: 1%;
+  font-size: ${isLowHeight ? "18px" : "22px"};
 `;
 const TextTime = styled.Text`
   color: coral;
   align-self: center;
-  font-size: 22px;
-  margin-top: 1%;
+  font-size: ${isLowHeight ? "18px" : "22px"};
 `;
 const ModalText = styled.Text`
   color: coral;
@@ -448,7 +455,6 @@ const GuessInput = ({
             style={{
               height: "100%",
               width: "100%",
-              padding: 10,
               overflow: "hidden",
               borderRadius: 30,
               alignItems: "center",
@@ -476,7 +482,6 @@ const GuessInput = ({
             style={{
               height: "100%",
               width: "100%",
-              padding: 10,
               overflow: "hidden",
               borderRadius: 30,
               alignItems: "center",
@@ -488,15 +493,17 @@ const GuessInput = ({
         </ButtonAgry>
       </ButtonAll>
       {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
-      <TextScore>
-        {t("Guess score")}: {score} / {pointForNextlevel}
-      </TextScore>
-      <TextTime>
-        {t("Guess time")}: {time}
-      </TextTime>
-      <TextTime>
-        {t("Mistakes")}: {mistakes}
-      </TextTime>
+      <LevelInfo>
+        <TextScore>
+          {t("Guess score")}: {score} / {pointForNextlevel}
+        </TextScore>
+        <TextTime>
+          {t("Guess time")}: {time}
+        </TextTime>
+        <TextTime>
+          {t("Mistakes")}: {mistakes}
+        </TextTime>
+      </LevelInfo>
       <View style={{ position: "absolute", bottom: 0 }}>
         <BannerAd
           unitId={TestIds.BANNER}

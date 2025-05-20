@@ -1,22 +1,23 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View, Text, Dimensions } from "react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import LottieView from "lottie-react-native";
 
+const screenHeight = Dimensions.get("window").height;
+const isLowHeight = screenHeight < 700;
+
 const EndlevelBlockText = styled.Text`
   width: 100%;
   height: 8%;
-  font-size: 22px;
-  margin-top: 10%;
+  font-size: ${isLowHeight ? "18px" : "22px"};
+  margin-top: ${isLowHeight ? "10px" : "10%"};
   color: whitesmoke;
   text-align: center;
 `;
-
 const ButtonAgry = styled.TouchableOpacity`
   width: 200px;
-  height: 50px;
+  height: ${isLowHeight ? "40px" : "50px"};
   margin: 0 auto;
   border-radius: 28px;
 `;
@@ -40,7 +41,7 @@ export default function Endlevel({ goToBegining, time }) {
       end={{ x: 1.0, y: 1.0 }}
       style={{ height: "100%", width: "100%", padding: 10 }}
     >
-      <EndlevelBlockText>{t("Endlevel greeting")}</EndlevelBlockText>
+      <EndlevelBlockText style={{ marginTop: 30 }}>{t("Endlevel greeting")}</EndlevelBlockText>
       <LottieView
         autoPlay
         style={{
@@ -48,7 +49,7 @@ export default function Endlevel({ goToBegining, time }) {
           aspectRatio: 1 / 1,
           backgroundColor: "#1E2322",
           overflow: "hidden",
-          marginBottom: 20,
+          marginBottom: isLowHeight ? 5 : 20,
         }}
         source={require("../Animation.json")}
       />

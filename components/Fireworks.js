@@ -1,22 +1,25 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Dimensions } from "react-native";
 import React from "react";
 import LottieView from "lottie-react-native";
 import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 
+const screenHeight = Dimensions.get("window").height;
+const isLowHeight = screenHeight < 700;
+
 const TextLevel = styled.Text`
   margin-top: 5%;
   color: coral;
   align-self: center;
-  font-size: 22px;
-  margin-bottom: 15px;
+  font-size: ${isLowHeight ? "18px" : "22px"};
+  margin-bottom: ${isLowHeight ? "10px" : "15px"};
 `;
 const TextExplaining = styled.Text`
   color: whitesmoke;
   align-self: flex-start;
-  margin-bottom: 15px;
-  font-size: 18px;
+  margin-bottom: ${isLowHeight ? "10px" : "15px"};
+  font-size: ${isLowHeight ? "15px" : "18px"};
 `;
 const ButtonAgry = styled.TouchableOpacity`
   width: 200px;
