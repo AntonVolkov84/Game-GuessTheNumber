@@ -5,7 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 
 const screenHeight = Dimensions.get("window").height;
-const isLowHeight = screenHeight < 700;
+const isLowHeight = screenHeight < 750;
 
 import {
   AdEventType,
@@ -39,7 +39,7 @@ const ButtonAll = styled.View`
 `;
 const ButtonAgry = styled.TouchableOpacity`
   width: ${isLowHeight ? "120px" : "150px"};
-  height: ${isLowHeight ? "35px" : "55px"};
+  height: ${isLowHeight ? "45px" : "55px"};
   margin: 0 auto;
   border-radius: 28px;
 `;
