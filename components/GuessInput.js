@@ -264,10 +264,7 @@ const GuessInput = ({
     }
   };
 
-  const fillEmptyCellsWithRandomNumbers = () => {
-    const updatedNumbers = numbers.map((num) => (num === null ? getRandomNumber() : num));
-    setNumbers(updatedNumbers);
-  };
+  const fillEmptyCellsWithRandomNumbers = () => setNumbers(numbers.map((e) => (e !== null ? e : getRandomNumber())));
 
   const getRandomNumber = () => {
     return Math.floor(Math.random() * 100);
