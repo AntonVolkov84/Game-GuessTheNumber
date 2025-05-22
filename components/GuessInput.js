@@ -270,7 +270,7 @@ const GuessInput = ({
   };
 
   const getRandomNumber = () => {
-    return Math.floor(Math.random() * 100) + 1;
+    return Math.floor(Math.random() * 100);
   };
   useEffect(() => {
     if (mistakes == 5) {
