@@ -103,10 +103,10 @@ const ModalText = styled.Text`
   text-align: center;
 `;
 
-const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest(TestIds.REWARDED_INTERSTITIAL, {
+const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest("ca-app-pub-9267417700367649/9602635882", {
   requestNonPersonalizedAdsOnly: true,
 });
-const rewardedInterstitialFillCells = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
+const rewardedInterstitialFillCells = InterstitialAd.createForAdRequest("ca-app-pub-9267417700367649/1163380145", {
   requestNonPersonalizedAdsOnly: true,
 });
 
@@ -295,7 +295,7 @@ const GuessInput = ({
       fillEmptyCellsWithRandomNumbers();
     });
     const unsubscribeEarned = rewardedInterstitial.addAdEventListener(RewardedAdEventType.EARNED_REWARD, (reward) => {
-      console.log("rewarded", reward);
+      console.log("Получена награда:", reward);
       setHintCount(reward.amount);
     });
     const unsubscribeClosed = rewardedInterstitial.addAdEventListener(AdEventType.CLOSED, () => {
@@ -503,7 +503,7 @@ const GuessInput = ({
       </LevelInfo>
       <View style={{ position: "absolute", bottom: 0 }}>
         <BannerAd
-          unitId={TestIds.BANNER}
+          unitId="ca-app-pub-9267417700367649/7435599553"
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
           requestOptions={{
             requestNonPersonalizedAdsOnly: true,
