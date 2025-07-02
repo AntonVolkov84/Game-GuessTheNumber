@@ -1,10 +1,12 @@
 import { View, FlatList, Image, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { useState } from "react";
 import { LanguageResources } from "../i18next.js";
 import i18next from "../i18next.js";
 import languageList from "../i18n/languageList.json";
 import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components";
+import { useTranslation } from "react-i18next";
+import { AdsConsent, AdsConsentDebugGeography } from "react-native-google-mobile-ads";
 
 const ButtonAgryLanguage = styled.TouchableOpacity`
   width: 150px;
@@ -28,6 +30,7 @@ const ButtonText = styled.Text`
 
 export default function Language({ setLanguage, savePlayerLanguage }) {
   const [visible, setVisible] = useState(false);
+  const { t } = useTranslation();
   const images = {
     en: require("../assets/england.png"),
     // ru: require("../assets/russia.png"),
@@ -39,6 +42,21 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
     i18next.changeLanguage(lng);
     setVisible(false);
     setLanguage(true);
+  };
+
+  const showConsentFormForce = async () => {
+    try {
+      await AdsConsent.reset();
+      await AdsConsent.requestInfoUpdate({
+        debugGeography: AdsConsentDebugGeography.EEA,
+      });
+      const consentStatus = await AdsConsent.gatherConsent();
+      console.log(consentStatus);
+      await AdsConsent.showPrivacyOptionsForm();
+      console.log(consentStatus);
+    } catch (error) {
+      console.warn("Error forcing privacy options form show:", error);
+    }
   };
 
   return (
@@ -66,7 +84,7 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
                       changeLng(item);
                     }}
                     style={{
-                      width: "30%",
+                      width: "27%",
                       aspectRatio: 1 / 1,
                       justifyContent: "center",
                       alignSelf: "center",
@@ -104,6 +122,9 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
                 </View>
               )}
             />
+            <TouchableOpacity style={{ marginBottom: 60 }} onPress={() => showConsentFormForce()}>
+              <ButtonText style={{ textAlign: "center" }}>{t("requestads")}</ButtonText>
+            </TouchableOpacity>
           </LinearGradient>
         </View>
       ) : (

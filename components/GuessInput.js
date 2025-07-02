@@ -14,7 +14,6 @@ import {
   InterstitialAd,
   RewardedAdEventType,
   RewardedInterstitialAd,
-  TestIds,
 } from "react-native-google-mobile-ads";
 
 const TextLevel = styled.Text`
@@ -46,7 +45,7 @@ const ButtonAgry = styled.TouchableOpacity`
 const ButtonText = styled.Text`
   color: whitesmoke;
   text-align: center;
-  font-size: ${isLowHeight ? "13px" : "18px"};
+  font-size: ${isLowHeight ? "12px" : "15px"};
 `;
 const GridBox = styled.View`
   margin-bottom: ${isLowHeight ? "8px" : "10px"};
@@ -103,7 +102,7 @@ const ModalText = styled.Text`
   text-align: center;
 `;
 
-const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest("ca-app-pub-9267417700367649/9602635882", {
+const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest("ca-app-pub-9267417700367649/8895308151", {
   requestNonPersonalizedAdsOnly: true,
 });
 const rewardedInterstitialFillCells = InterstitialAd.createForAdRequest("ca-app-pub-9267417700367649/1163380145", {
@@ -289,13 +288,11 @@ const GuessInput = ({
     });
 
     const unsubscribeCloseFillCells = rewardedInterstitialFillCells.addAdEventListener(AdEventType.CLOSED, () => {
-      console.log("Interstitial ad closed");
       setLoadedAdvertisementFillCells(false);
       rewardedInterstitialFillCells.load();
       fillEmptyCellsWithRandomNumbers();
     });
     const unsubscribeEarned = rewardedInterstitial.addAdEventListener(RewardedAdEventType.EARNED_REWARD, (reward) => {
-      console.log("Получена награда:", reward);
       setHintCount(reward.amount);
     });
     const unsubscribeClosed = rewardedInterstitial.addAdEventListener(AdEventType.CLOSED, () => {
@@ -372,7 +369,7 @@ const GuessInput = ({
                 <ModalButtonText>{t("GuessModal buttoneject")}</ModalButtonText>
               </LinearGradient>
             </ModalButton>
-            {videoADSref.current ? (
+            {loadedAdvertisement ? (
               <ModalButton
                 onPress={() => {
                   rewardedInterstitial.show();
@@ -501,7 +498,7 @@ const GuessInput = ({
           {t("Mistakes")}: {mistakes}
         </TextTime>
       </LevelInfo>
-      <View style={{ position: "absolute", bottom: 0 }}>
+      <View style={styles.adContainer}>
         <BannerAd
           unitId="ca-app-pub-9267417700367649/7435599553"
           size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
@@ -534,10 +531,10 @@ const styles = StyleSheet.create({
     color: "whitesmoke",
   },
   highlightedCell: {
-    backgroundColor: "red", // Цвет границы для ячейки с препятствием
+    backgroundColor: "red",
   },
   highlightedHint: {
-    backgroundColor: "green", // Цвет границы для ячейки с препятствием
+    backgroundColor: "green",
   },
   hintButton: {
     backgroundColor: "#ffa500",
@@ -553,6 +550,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 22,
     color: "coral",
+  },
+  adContainer: {
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    backgroundColor: "#1E1E1E",
+    alignItems: "center",
+    paddingVertical: 4,
+    borderTopWidth: 1,
+    borderTopColor: "#333",
+  },
+  adLabel: {
+    fontSize: 10,
+    color: "#aaa",
+    marginTop: 2,
   },
 });
 

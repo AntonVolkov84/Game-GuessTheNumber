@@ -16,6 +16,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
+import { AdsConsent, AdsConsentDebugGeography, AdsConsentStatus, MobileAds } from "react-native-google-mobile-ads";
 
 const SoundViewBlock = styled.View`
   flex-direction: row;
@@ -94,6 +95,37 @@ export default function App() {
     await NavigationBar.setBackgroundColorAsync("#1E2322");
     await NavigationBar.setButtonStyleAsync("light");
   };
+  useEffect(() => {
+    const requestConsentInfo = async () => {
+      try {
+        await MobileAds().initialize();
+        if (AdsConsent && typeof AdsConsent.requestInfoUpdate === "function") {
+          await AdsConsent.requestInfoUpdate({
+            debugGeography: AdsConsentDebugGeography.EEA,
+          });
+        } else {
+          console.warn("AdsConsent API is not available");
+          return;
+        }
+        await AdsConsent.loadAndShowConsentFormIfRequired();
+        const consentStatus = await AdsConsent.gatherConsent();
+        if (consentStatus.status === AdsConsentStatus.OBTAINED) {
+          console.log("User gave consent!");
+        } else if (consentStatus.status === AdsConsentStatus.REQUIRED) {
+          console.log("Consent is still required.");
+        }
+        await MobileAds().setRequestConfiguration({
+          tagForChildDirectedTreatment: true,
+          tagForUnderAgeOfConsent: true,
+          maxAdContentRating: "G",
+        });
+      } catch (error) {
+        console.warn("Consent error:", error);
+      }
+    };
+
+    requestConsentInfo();
+  }, []);
 
   useEffect(() => {
     if (mistakes == 5) {

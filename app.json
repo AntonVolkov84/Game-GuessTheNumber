@@ -2,7 +2,7 @@
   "expo": {
     "name": "Combine numbers",
     "slug": "GuessTheNumber",
-    "version": "1.3.3",
+    "version": "1.3.9",
     "orientation": "portrait",
     "icon": "./assets/Logo.png",
     "userInterfaceStyle": "light",
@@ -10,6 +10,9 @@
       "image": "./assets/Logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "enabled": false
     },
     "ios": {
       "supportsTablet": true

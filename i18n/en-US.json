@@ -1,5 +1,6 @@
 {
   "Change language": "Change language",
+  "requestads": "Opt out of advertising / Change settings",
   "StartLevel title": "You`r level is",
   "StartLevel rule": "Sum of numbers by vertically, horizontally and diagonally can be divided by",
   "StartLevel info": "If you add two even numbers or two odd numbers, you are guaranteed to get an even result.",
@@ -8,7 +9,7 @@
   "Guess info": "Sum of numbers by vertically, horizontally and diagonally can be divided by",
   "Guess hintbutton": "Hints",
   "Guess hintbuttonOff": "Get hints",
-  "Guess addbutton": "Fill empty cells",
+  "Guess addbutton": "Fill cells. Ads!",
   "Guess score": "Score",
   "Guess time": "Time",
   "GuessModal info": "You have no hints left. You can view the advertisement and get more",
