@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Alert, Text, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import GuessInput from "./components/GuessInput";
 import Fireworks from "./components/Fireworks";
 import StartLevel from "./components/StartLevel";
 import Language from "./components/Language";
-import styled from "styled-components";
 import Rule from "./components/Rule";
 import Endlevel from "./components/Endlevel";
 import { StatusBar } from "expo-status-bar";
@@ -18,70 +17,48 @@ import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
 import { AdsConsent, AdsConsentDebugGeography, AdsConsentStatus, MobileAds } from "react-native-google-mobile-ads";
 
-const SoundViewBlock = styled.View`
-  flex-direction: row;
-  position: absolute;
-  width: 95%;
-  height: 4%;
-  top: 5%;
-  right: 5%;
-  align-items: center;
-`;
-const MusicAtrubation = styled.Text`
-  color: #c7b22e;
-  font-size: 6px;
-  text-justify: center;
-  text-align: center;
-  margin-right: 4%;
-`;
-const BlockButton = styled.View`
-  flex-direction: row;
-  position: absolute;
-  right: 0;
-`;
-
 const setLng = (lng) => {
   i18next.changeLanguage(lng);
 };
 
 function savePlayerLevel(key, value) {
-  SecureStore.setItem(key, value);
+  SecureStore.setItemAsync(key, value);
 }
 function savePlayerTime(key, value) {
-  SecureStore.setItem(key, value);
+  SecureStore.setItemAsync(key, value);
 }
 function savePlayerLanguage(key, value) {
-  SecureStore.setItem(key, value);
+  SecureStore.setItemAsync(key, value);
 }
 function savePlayerHints(key, value) {
-  SecureStore.setItem(key, value);
+  SecureStore.setItemAsync(key, value);
 }
 
 function getSavedPlayerLevel(key) {
-  return SecureStore.getItem(key);
+  return SecureStore.getItemAsync(key);
 }
 function getSavedPlayerHints(key) {
-  return SecureStore.getItem(key);
+  return SecureStore.getItemAsync(key);
 }
 function getSavedPlayerTime(key) {
-  return SecureStore.getItem(key);
+  return SecureStore.getItemAsync(key);
 }
 function getSavedPlayerLanguage(key) {
-  return SecureStore.getItem(key);
+  return SecureStore.getItemAsync(key);
 }
 
 export default function App() {
   const [score, setScore] = useState(0);
   const [start, setStart] = useState(false);
-  const [level, setLevel] = useState(getSavedPlayerLevel("level") || 1);
+  const [level, setLevel] = useState(1);
   const [mistakes, setMistakes] = useState(0);
   const pointForNextlevel = [1000];
-  const [hintCount, setHintCount] = useState(getSavedPlayerHints("hints") || 2);
+  const [hintCount, setHintCount] = useState(2);
   const gameDividers = [2, 5, 10, 3, 9, 4, 6, 7];
   const [relevel, setRelevel] = useState(false);
-  const [language, setLanguage] = useState(getSavedPlayerLanguage("lng") || null);
+  const [language, setLanguage] = useState(null);
   const [rule, setRule] = useState(false);
-  const [time, setTime] = useState(getSavedPlayerTime("time") || 0);
+  const [time, setTime] = useState(0);
   const [loadedAdvertisement, setLoadedAdvertisement] = useState(false);
   const [loadedAdvertisementFillCells, setLoadedAdvertisementFillCells] = useState(false);
   const { t } = useTranslation();
@@ -91,10 +68,29 @@ export default function App() {
   const [soundPaused, setSoundPaused] = useState(false);
   let timer = time || 0;
 
+  useEffect(() => {
+    getSavedPlayerLevel("level").then((savedLevel) => {
+      if (savedLevel) setLevel(Number(savedLevel));
+    });
+    getSavedPlayerHints("hints").then((savedHints) => {
+      if (savedHints) setHintCount(Number(savedHints));
+    });
+    getSavedPlayerLanguage("lng").then((savedLng) => {
+      if (savedLng) {
+        setLanguage(savedLng);
+        setLng(savedLng);
+      }
+    });
+    getSavedPlayerTime("time").then((savedTime) => {
+      if (savedTime) setTime(Number(savedTime));
+    });
+  }, []);
+
   const customNavigationBar = async () => {
     await NavigationBar.setBackgroundColorAsync("#1E2322");
     await NavigationBar.setButtonStyleAsync("light");
   };
+
   useEffect(() => {
     const requestConsentInfo = async () => {
       try {
@@ -103,9 +99,6 @@ export default function App() {
           await AdsConsent.requestInfoUpdate({
             debugGeography: AdsConsentDebugGeography.EEA,
           });
-        } else {
-          console.warn("AdsConsent API is not available");
-          return;
         }
         await AdsConsent.loadAndShowConsentFormIfRequired();
         const consentStatus = await AdsConsent.gatherConsent();
@@ -128,13 +121,13 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (mistakes == 5) {
-      if (level == 1) {
-        Alert.alert(`${t("AlertMistakesLevelDown1level")}`);
+    if (mistakes === 5) {
+      if (level === 1) {
+        Alert.alert(t("AlertMistakesLevelDown1level"));
         setMistakes(0);
         return setScore(0);
       }
-      Alert.alert(`${t("AlertMistakesLevelDown")}`);
+      Alert.alert(t("AlertMistakesLevelDown"));
       setMistakes(0);
       savePlayerLevel("level", `${level - 1}`);
       setScore(0);
@@ -143,21 +136,14 @@ export default function App() {
   }, [mistakes]);
 
   useEffect(() => {
-    if (level === "1") {
-      setStart(true);
-    }
+    if (level === 1) setStart(true);
   }, [level]);
-  useEffect(() => {
-    if (language) {
-      const lng = getSavedPlayerLanguage("lng");
-      setLng(lng);
-    }
-  }, [language]);
+
   useEffect(() => {
     customNavigationBar();
-    if (+score >= +pointForNextlevel) {
+    if (score >= pointForNextlevel[0]) {
       setRelevel(true);
-      const newLevel = Number(level) + Number(1);
+      const newLevel = level + 1;
       savePlayerLevel("level", `${newLevel}`);
       savePlayerTime("time", `${time}`);
       savePlayerHints("hints", `${hintCount}`);
@@ -182,7 +168,7 @@ export default function App() {
     setRelevel(false);
     setRule(true);
     savePlayerLevel("level", "1");
-    setTime("0");
+    setTime(0);
     savePlayerTime("time", "0");
     clockRef.current = null;
   };
@@ -196,103 +182,93 @@ export default function App() {
       </>
     );
   }
+
   const clockStart = () => {
     clockRef.current = setInterval(() => {
       timer++;
       setTime(timer);
     }, 1000);
   };
+
   return (
     <>
       <StatusBar style="light" />
       {!language ? (
         <Language savePlayerLanguage={savePlayerLanguage} setLanguage={setLanguage} />
+      ) : !rule ? (
+        <Rule setRule={setRule} />
+      ) : start ? (
+        <View>
+          <StartLevel setStart={setStart} level={level} gameDeviders={gameDividers} />
+        </View>
       ) : (
-        <>
-          {!rule ? (
-            <Rule setRule={setRule} />
+        <View style={styles.container}>
+          {relevel ? (
+            <Fireworks level={level} gameDeviders={gameDividers} setRelevel={setRelevel} />
           ) : (
-            <>
-              {start ? (
-                <View>
-                  <StartLevel setStart={setStart} level={level} gameDeviders={gameDividers} />
-                </View>
-              ) : (
-                <View style={styles.container}>
-                  {relevel ? (
-                    <Fireworks level={level} gameDeviders={gameDividers} setRelevel={setRelevel} />
-                  ) : (
-                    <LinearGradient
-                      colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
-                      start={{ x: 0.0, y: 0.0 }}
-                      end={{ x: 1.0, y: 1.0 }}
-                      style={{ height: "100%", width: "100%", padding: 10, paddingTop: "5%" }}
+            <LinearGradient
+              colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.linearGradient}
+            >
+              <View style={styles.soundViewBlock}>
+                {!soundPaused && <Text style={styles.musicAttribution}>Pufino - Thoughtful (freetouse.com)</Text>}
+                <View style={styles.blockButton}>
+                  {soundPaused ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setSoundPaused(false);
+                        soundRef.current?.playAsync();
+                      }}
                     >
-                      <SoundViewBlock>
-                        {soundPaused ? null : (
-                          <View>
-                            <MusicAtrubation>Pufino - Thoughtful (freetouse.com)</MusicAtrubation>
-                          </View>
-                        )}
-                        <BlockButton>
-                          {soundPaused ? (
-                            <TouchableOpacity
-                              onPress={() => {
-                                setSoundPaused(false);
-                                soundRef.current.playAsync();
-                              }}
-                            >
-                              <Entypo name="sound" size={24} color="#c7b22e" />
-                            </TouchableOpacity>
-                          ) : (
-                            <TouchableOpacity
-                              onPress={() => {
-                                setSoundPaused(true);
-                                soundRef.current.pauseAsync();
-                              }}
-                            >
-                              <Entypo name="sound-mute" size={24} color="#c7b22e" />
-                            </TouchableOpacity>
-                          )}
-                          <TouchableOpacity
-                            onPress={() => {
-                              setLanguage(null);
-                              setScore(0);
-                            }}
-                          >
-                            <MaterialIcons name="language" size={24} color="#c7b22e" style={{ marginLeft: 30 }} />
-                          </TouchableOpacity>
-                        </BlockButton>
-                      </SoundViewBlock>
-                      <GuessInput
-                        loadedAdvertisement={loadedAdvertisement}
-                        setLoadedAdvertisement={setLoadedAdvertisement}
-                        clockRef={clockRef}
-                        playSound={playSound}
-                        setLanguage={setLanguage}
-                        clockStart={clockStart}
-                        time={time}
-                        setTime={setTime}
-                        score={score}
-                        pointForNextlevel={pointForNextlevel}
-                        setHintCount={setHintCount}
-                        hintCount={hintCount}
-                        onScoreUpdate={handleScoreUpdate}
-                        level={level}
-                        gameDeviders={gameDividers}
-                        soundRef={soundRef}
-                        loadedAdvertisementFillCells={loadedAdvertisementFillCells}
-                        setLoadedAdvertisementFillCells={setLoadedAdvertisementFillCells}
-                        setMistakes={setMistakes}
-                        mistakes={mistakes}
-                      />
-                    </LinearGradient>
+                      <Entypo name="sound" size={24} color="#c7b22e" />
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setSoundPaused(true);
+                        soundRef.current?.pauseAsync();
+                      }}
+                    >
+                      <Entypo name="sound-mute" size={24} color="#c7b22e" />
+                    </TouchableOpacity>
                   )}
+                  <TouchableOpacity
+                    onPress={() => {
+                      setLanguage(null);
+                      setScore(0);
+                    }}
+                  >
+                    <MaterialIcons name="language" size={24} color="#c7b22e" style={{ marginLeft: 30 }} />
+                  </TouchableOpacity>
                 </View>
-              )}
-            </>
+              </View>
+              <GuessInput
+                loadedAdvertisement={loadedAdvertisement}
+                setLoadedAdvertisement={setLoadedAdvertisement}
+                clockRef={clockRef}
+                playSound={playSound}
+                setLanguage={setLanguage}
+                clockStart={clockStart}
+                time={time}
+                setTime={setTime}
+                score={score}
+                pointForNextlevel={pointForNextlevel}
+                setHintCount={setHintCount}
+                hintCount={hintCount}
+                onScoreUpdate={handleScoreUpdate}
+                level={level}
+                gameDeviders={gameDividers}
+                soundRef={soundRef}
+                loadedAdvertisementFillCells={loadedAdvertisementFillCells}
+                setLoadedAdvertisementFillCells={setLoadedAdvertisementFillCells}
+                setMistakes={setMistakes}
+                mistakes={mistakes}
+              />
+            </LinearGradient>
           )}
-        </>
+        </View>
       )}
     </>
   );
@@ -303,5 +279,31 @@ const styles = StyleSheet.create({
     flex: 1,
     height: "100%",
     marginTop: 0,
+  },
+  linearGradient: {
+    height: "100%",
+    width: "100%",
+    padding: 10,
+    paddingTop: "5%",
+  },
+  soundViewBlock: {
+    flexDirection: "row",
+    position: "absolute",
+    width: "95%",
+    height: "4%",
+    top: "5%",
+    right: "5%",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  musicAttribution: {
+    color: "#c7b22e",
+    fontSize: 6,
+    textAlign: "center",
+    marginRight: "4%",
+  },
+  blockButton: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

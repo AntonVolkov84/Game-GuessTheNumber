@@ -1,35 +1,10 @@
-import { View, Text, TouchableOpacity, Dimensions } from "react-native";
-import React from "react";
+import { Text, TouchableOpacity, Dimensions, StyleSheet } from "react-native";
 import LottieView from "lottie-react-native";
-import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 
 const screenHeight = Dimensions.get("window").height;
 const isLowHeight = screenHeight < 700;
-
-const TextLevel = styled.Text`
-  margin-top: 5%;
-  color: coral;
-  align-self: center;
-  font-size: ${isLowHeight ? "18px" : "22px"};
-  margin-bottom: ${isLowHeight ? "10px" : "15px"};
-`;
-const TextExplaining = styled.Text`
-  color: whitesmoke;
-  align-self: flex-start;
-  margin-bottom: ${isLowHeight ? "10px" : "15px"};
-  font-size: ${isLowHeight ? "15px" : "18px"};
-`;
-const ButtonAgry = styled.TouchableOpacity`
-  width: 200px;
-  height: 50px;
-  margin: 0 auto;
-  border-radius: 28px;
-`;
-const ButtonText = styled.Text`
-  color: whitesmoke;
-`;
 
 export default function Fireworks({ level, setRelevel, gameDeviders }) {
   const levelDevider = gameDeviders[level - 1];
@@ -40,52 +15,87 @@ export default function Fireworks({ level, setRelevel, gameDeviders }) {
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
       start={{ x: 0.0, y: 0.0 }}
       end={{ x: 1.0, y: 1.0 }}
-      style={{ height: "100%", width: "100%", padding: 10, paddingTop: "5%" }}
+      style={styles.container}
     >
-      <TextLevel>
+      <Text style={styles.textLevel}>
         {t("Fireworks title")} {level}
-      </TextLevel>
-      <TextExplaining>
-        {t("Fireworks rule")} <Text style={{ color: "red" }}>{levelDevider}</Text>
-      </TextExplaining>
-      {levelDevider === 2 ? <TextExplaining>{t("Fireworks a")}</TextExplaining> : <></>}
-      {levelDevider === 5 ? <TextExplaining>{t("Fireworks b")}</TextExplaining> : <></>}
-      {levelDevider === 10 ? <TextExplaining>{t("Fireworks c")}</TextExplaining> : <></>}
-      {levelDevider === 3 ? <TextExplaining>{t("Fireworks d")}</TextExplaining> : <></>}
-      {levelDevider === 9 ? <TextExplaining>{t("Fireworks e")}</TextExplaining> : <></>}
-      {levelDevider === 4 ? <TextExplaining>{t("Fireworks f")}</TextExplaining> : <></>}
-      {levelDevider === 6 ? <TextExplaining>{t("Fireworks g")}</TextExplaining> : <></>}
-      {levelDevider === 7 ? <TextExplaining>{t("Fireworks h")}</TextExplaining> : <></>}
-      <LottieView
-        autoPlay
-        style={{
-          width: "100%",
-          aspectRatio: 1 / 1,
-          backgroundColor: "#1E2322",
-          overflow: "hidden",
-          marginBottom: 20,
-        }}
-        source={require("../Animation.json")}
-      />
+      </Text>
 
-      <ButtonAgry onPress={() => setRelevel(false)}>
+      <Text style={styles.textExplaining}>
+        {t("Fireworks rule")} <Text style={styles.inlineRed}>{levelDevider}</Text>
+      </Text>
+
+      {levelDevider === 2 && <Text style={styles.textExplaining}>{t("Fireworks a")}</Text>}
+      {levelDevider === 5 && <Text style={styles.textExplaining}>{t("Fireworks b")}</Text>}
+      {levelDevider === 10 && <Text style={styles.textExplaining}>{t("Fireworks c")}</Text>}
+      {levelDevider === 3 && <Text style={styles.textExplaining}>{t("Fireworks d")}</Text>}
+      {levelDevider === 9 && <Text style={styles.textExplaining}>{t("Fireworks e")}</Text>}
+      {levelDevider === 4 && <Text style={styles.textExplaining}>{t("Fireworks f")}</Text>}
+      {levelDevider === 6 && <Text style={styles.textExplaining}>{t("Fireworks g")}</Text>}
+      {levelDevider === 7 && <Text style={styles.textExplaining}>{t("Fireworks h")}</Text>}
+
+      <LottieView autoPlay style={styles.lottie} source={require("../Animation.json")} />
+
+      <TouchableOpacity style={styles.buttonAgry} onPress={() => setRelevel(false)}>
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
           start={{ x: 0.0, y: 0.0 }}
           end={{ x: 1.0, y: 1.0 }}
-          style={{
-            height: "100%",
-            width: "100%",
-            padding: 10,
-            overflow: "hidden",
-            borderRadius: 30,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          style={styles.buttonGradient}
         >
-          <ButtonText>{t("Fireworks button")}</ButtonText>
+          <Text style={styles.buttonText}>{t("Fireworks button")}</Text>
         </LinearGradient>
-      </ButtonAgry>
+      </TouchableOpacity>
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+    width: "100%",
+    padding: 10,
+    paddingTop: "5%",
+  },
+  textLevel: {
+    marginTop: "5%",
+    color: "coral",
+    alignSelf: "center",
+    fontSize: isLowHeight ? 18 : 22,
+    marginBottom: isLowHeight ? 10 : 15,
+  },
+  textExplaining: {
+    color: "whitesmoke",
+    alignSelf: "flex-start",
+    marginBottom: isLowHeight ? 10 : 15,
+    fontSize: isLowHeight ? 15 : 18,
+  },
+  inlineRed: {
+    color: "red",
+  },
+  lottie: {
+    width: "100%",
+    aspectRatio: 1,
+    backgroundColor: "#1E2322",
+    overflow: "hidden",
+    marginBottom: 20,
+  },
+  buttonAgry: {
+    width: 200,
+    height: 50,
+    alignSelf: "center",
+    borderRadius: 28,
+  },
+  buttonGradient: {
+    height: "100%",
+    width: "100%",
+    padding: 10,
+    overflow: "hidden",
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "whitesmoke",
+  },
+});

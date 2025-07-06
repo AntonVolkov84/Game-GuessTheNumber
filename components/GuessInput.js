@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { View, FlatList, TouchableOpacity, Text, StyleSheet, Image, Dimensions } from "react-native";
-import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 
@@ -15,92 +14,6 @@ import {
   RewardedAdEventType,
   RewardedInterstitialAd,
 } from "react-native-google-mobile-ads";
-
-const TextLevel = styled.Text`
-  color: coral;
-  margin-top: ${isLowHeight ? "10px" : "6%"};
-  align-self: center;
-  font-size: ${isLowHeight ? "20px" : "22px"};
-  margin-bottom: ${isLowHeight ? 0 : "10px"};
-`;
-const TextExplaining = styled.Text`
-  color: whitesmoke;
-  align-self: flex-start;
-  justify-content: center;
-  margin-bottom: ${isLowHeight ? "5px" : "10px"};
-  font-size: ${isLowHeight ? "13px" : "15px"};
-  padding-left: 2%;
-`;
-const ButtonAll = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-`;
-const ButtonAgry = styled.TouchableOpacity`
-  width: ${isLowHeight ? "120px" : "150px"};
-  height: ${isLowHeight ? "45px" : "55px"};
-  margin: 0 auto;
-  border-radius: 28px;
-`;
-const ButtonText = styled.Text`
-  color: whitesmoke;
-  text-align: center;
-  font-size: ${isLowHeight ? "12px" : "15px"};
-`;
-const GridBox = styled.View`
-  margin-bottom: ${isLowHeight ? "8px" : "10px"};
-`;
-
-const ModalBlock = styled.View`
-  height: 100%;
-  width: 100%;
-  background-color: #1e2322;
-  position: fixed;
-`;
-const ModalBlockInfo = styled.View`
-  position: absolute;
-  width: 90%;
-  height: 40%;
-  border-radius: 18px;
-  top: 25%;
-  left: 15px;
-  background-color: #1f433a;
-  padding: 0 5px 0 5px;
-`;
-const ModalButton = styled.TouchableOpacity`
-  width: 150px;
-  height: 50px;
-  border-radius: 10px;
-`;
-const ModalButtonText = styled.Text`
-  color: whitesmoke;
-  text-align: center;
-`;
-const LevelInfo = styled.View`
-  flex-direction: ${isLowHeight ? "row" : "column"};
-  gap: ${isLowHeight ? "15px" : 0};
-  justify-content: center;
-  align-items: center;
-`;
-const TextScore = styled.Text`
-  color: coral;
-  align-self: center;
-  font-size: ${isLowHeight ? "18px" : "22px"};
-`;
-const TextTime = styled.Text`
-  color: coral;
-  align-self: center;
-  font-size: ${isLowHeight ? "18px" : "22px"};
-`;
-const ModalText = styled.Text`
-  color: coral;
-  display: block;
-  width: 100%;
-  height: 70px;
-  margin: 15px 15px 0 0;
-  font-size: 18px;
-  text-align: center;
-`;
 
 const rewardedInterstitial = RewardedInterstitialAd.createForAdRequest("ca-app-pub-9267417700367649/8895308151", {
   requestNonPersonalizedAdsOnly: true,
@@ -332,9 +245,9 @@ const GuessInput = ({
 
   return (
     <View style={{ height: "100%" }}>
-      <ModalBlock style={{ display: modal ? "contents" : "none" }}>
-        <ModalBlockInfo>
-          <ModalText>{t("GuessModal info")}</ModalText>
+      <View style={[styles.modalBlock, { display: modal ? "contents" : "none" }]}>
+        <View style={styles.modalBlockInfo}>
+          <Text style={styles.modalText}>{t("GuessModal info")}</Text>
           <Image
             source={require("../assets/mind.png")}
             style={{
@@ -347,7 +260,8 @@ const GuessInput = ({
             }}
           ></Image>
           <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-            <ModalButton
+            <TouchableOpacity
+              style={styles.modalButton}
               onPress={() => {
                 setModal(false);
               }}
@@ -366,11 +280,12 @@ const GuessInput = ({
                   justifyContent: "center",
                 }}
               >
-                <ModalButtonText>{t("GuessModal buttoneject")}</ModalButtonText>
+                <Text style={styles.modalButtonText}>{t("GuessModal buttoneject")}</Text>
               </LinearGradient>
-            </ModalButton>
+            </TouchableOpacity>
             {loadedAdvertisement ? (
-              <ModalButton
+              <TouchableOpacity
+                style={styles.modalButton}
                 onPress={() => {
                   rewardedInterstitial.show();
                   setModal(false);
@@ -390,11 +305,12 @@ const GuessInput = ({
                     justifyContent: "center",
                   }}
                 >
-                  <ModalButtonText>{t("GuessModal buttonagry")}</ModalButtonText>
+                  <Text style={styles.modalButtonText}>{t("GuessModal buttonagry")}</Text>
                 </LinearGradient>
-              </ModalButton>
+              </TouchableOpacity>
             ) : (
-              <ModalButton
+              <TouchableOpacity
+                style={styles.modalButton}
                 onPress={() => {
                   setModal(false);
                 }}
@@ -413,35 +329,37 @@ const GuessInput = ({
                     justifyContent: "center",
                   }}
                 >
-                  <ModalButtonText>{t("GuessModal buttonNoads")}</ModalButtonText>
+                  <Text style={styles.modalButtonText}>{t("GuessModal buttonNoads")}</Text>
                 </LinearGradient>
-              </ModalButton>
+              </TouchableOpacity>
             )}
           </View>
-        </ModalBlockInfo>
-      </ModalBlock>
-      <TextLevel>{t("Guess title")}:</TextLevel>
-      <TextExplaining>
+        </View>
+      </View>
+      <Text Text style={styles.textLevel}>
+        {t("Guess title")}:
+      </Text>
+      <Text style={styles.textExplaining}>
         {t("Guess info")} {levelDevider}
-      </TextExplaining>
-      {levelDevider === 2 ? <TextExplaining>{t("Fireworks a")}</TextExplaining> : <></>}
-      {levelDevider === 5 ? <TextExplaining>{t("Fireworks b")}</TextExplaining> : <></>}
-      {levelDevider === 10 ? <TextExplaining>{t("Fireworks c")}</TextExplaining> : <></>}
-      {levelDevider === 3 ? <TextExplaining>{t("Fireworks d")}</TextExplaining> : <></>}
-      {levelDevider === 9 ? <TextExplaining>{t("Fireworks e")}</TextExplaining> : <></>}
-      {levelDevider === 4 ? <TextExplaining>{t("Fireworks f")}</TextExplaining> : <></>}
-      {levelDevider === 6 ? <TextExplaining>{t("Fireworks g")}</TextExplaining> : <></>}
-      {levelDevider === 7 ? <TextExplaining>{t("Fireworks h")}</TextExplaining> : <></>}
-      <GridBox>
+      </Text>
+      {levelDevider === 2 ? <Text style={styles.textExplaining}>{t("Fireworks a")}</Text> : <></>}
+      {levelDevider === 5 ? <Text style={styles.textExplaining}>{t("Fireworks b")}</Text> : <></>}
+      {levelDevider === 10 ? <Text style={styles.textExplaining}>{t("Fireworks c")}</Text> : <></>}
+      {levelDevider === 3 ? <Text style={styles.textExplaining}>{t("Fireworks d")}</Text> : <></>}
+      {levelDevider === 9 ? <Text style={styles.textExplaining}>{t("Fireworks e")}</Text> : <></>}
+      {levelDevider === 4 ? <Text style={styles.textExplaining}>{t("Fireworks f")}</Text> : <></>}
+      {levelDevider === 6 ? <Text style={styles.textExplaining}>{t("Fireworks g")}</Text> : <></>}
+      {levelDevider === 7 ? <Text style={styles.textExplaining}>{t("Fireworks h")}</Text> : <></>}
+      <View style={styles.gridBox}>
         <FlatList
           data={numbers}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={10}
         />
-      </GridBox>
-      <ButtonAll>
-        <ButtonAgry onPress={showHint}>
+      </View>
+      <View style={styles.buttonAll}>
+        <TouchableOpacity style={styles.buttonAgry} onPress={showHint}>
           <LinearGradient
             colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
             start={{ x: 0.0, y: 0.0 }}
@@ -456,15 +374,16 @@ const GuessInput = ({
             }}
           >
             {hintCount === 0 ? (
-              <ButtonText>{t("Guess hintbuttonOff")}</ButtonText>
+              <Text style={styles.buttonText}>{t("Guess hintbuttonOff")}</Text>
             ) : (
-              <ButtonText>
+              <Text style={styles.buttonText}>
                 {t("Guess hintbutton")} {hintCount}
-              </ButtonText>
+              </Text>
             )}
           </LinearGradient>
-        </ButtonAgry>
-        <ButtonAgry
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.buttonAgry}
           onPress={() => {
             loadedAdvertisementFillCells ? rewardedInterstitialFillCells.show() : fillEmptyCellsWithRandomNumbers();
           }}
@@ -482,22 +401,22 @@ const GuessInput = ({
               justifyContent: "center",
             }}
           >
-            <ButtonText>{t("Guess addbutton")}</ButtonText>
+            <Text style={styles.buttonText}>{t("Guess addbutton")}</Text>
           </LinearGradient>
-        </ButtonAgry>
-      </ButtonAll>
+        </TouchableOpacity>
+      </View>
       {hint ? <Text style={styles.hintText}>{hint}</Text> : null}
-      <LevelInfo>
-        <TextScore>
+      <View style={styles.levelInfo}>
+        <Text style={styles.textScore}>
           {t("Guess score")}: {score} / {pointForNextlevel}
-        </TextScore>
-        <TextTime>
+        </Text>
+        <Text style={styles.textTime}>
           {t("Guess time")}: {time}
-        </TextTime>
-        <TextTime>
+        </Text>
+        <Text style={styles.textTime}>
           {t("Mistakes")}: {mistakes}
-        </TextTime>
-      </LevelInfo>
+        </Text>
+      </View>
       <View style={styles.adContainer}>
         <BannerAd
           unitId="ca-app-pub-9267417700367649/7435599553"
@@ -565,6 +484,90 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: "#aaa",
     marginTop: 2,
+  },
+  modalBlock: {
+    height: "100%",
+    width: "100%",
+    backgroundColor: "#1e2322",
+    position: "fixed",
+  },
+  modalBlockInfo: {
+    position: "absolute",
+    width: "90%",
+    height: "40%",
+    borderRadius: 18,
+    top: "25%",
+    left: 15,
+    backgroundColor: "#1f433a",
+    paddingHorizontal: 5,
+  },
+  textLevel: {
+    color: "coral",
+    marginTop: "6%",
+    alignSelf: "center",
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  textExplaining: {
+    color: "whitesmoke",
+    alignSelf: "flex-start",
+    marginBottom: isLowHeight ? 5 : 10,
+    fontSize: isLowHeight ? 13 : 15,
+    paddingLeft: "2%",
+  },
+  buttonAll: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+  },
+  buttonAgry: {
+    width: isLowHeight ? 120 : 150,
+    height: isLowHeight ? 45 : 55,
+    marginLeft: "auto",
+    marginRight: "auto",
+    borderRadius: 28,
+  },
+  buttonText: {
+    color: "whitesmoke",
+    textAlign: "center",
+    fontSize: isLowHeight ? 12 : 14,
+  },
+  gridBox: {
+    marginBottom: isLowHeight ? 8 : 10,
+  },
+  modalButton: {
+    width: 150,
+    height: 50,
+    borderRadius: 10,
+  },
+  modalButtonText: {
+    color: "whitesmoke",
+    textAlign: "center",
+  },
+  levelInfo: {
+    flexDirection: isLowHeight ? "row" : "column",
+    gap: isLowHeight ? 15 : 0,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  textScore: {
+    color: "coral",
+    alignSelf: "center",
+    fontSize: isLowHeight ? 18 : 22,
+  },
+  textTime: {
+    color: "coral",
+    alignSelf: "center",
+    fontSize: isLowHeight ? 18 : 22,
+  },
+  modalText: {
+    color: "coral",
+    width: "100%",
+    height: 70,
+    marginTop: 15,
+    marginRight: 15,
+    fontSize: 18,
+    textAlign: "center",
   },
 });
 

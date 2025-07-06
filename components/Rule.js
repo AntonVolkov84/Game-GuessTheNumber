@@ -1,64 +1,10 @@
-import { View, Text, Image, Dimensions } from "react-native";
+import React from "react";
+import { View, Text, Image, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
 import { useTranslation } from "react-i18next";
-import styled from "styled-components";
 import { LinearGradient } from "expo-linear-gradient";
 
 const screenHeight = Dimensions.get("window").height;
 const isLowHeight = screenHeight < 700;
-
-const ButtonAgryLanguage = styled.TouchableOpacity`
-  width: 150px;
-  height: 60px;
-  margin: 0 auto;
-  border-radius: 28px;
-  margin-top: 2%;
-`;
-const ButtonText = styled.Text`
-  color: whitesmoke;
-  font-size: 15px;
-  text-align: center;
-`;
-const RuleBlock = styled.View`
-  flex-direction: row;
-  height: ${isLowHeight ? "20%" : "22%"};
-  gap: 10px;
-  margin-top: 5%;
-  justify-content: center;
-  align-items: center;
-`;
-const RuleBlockInfo = styled.View`
-  flex-direction: row;
-  height: 10%;
-  margin-top: 2%;
-  justify-content: center;
-  align-items: center;
-`;
-const RuleBlockImage = styled.Image`
-  width: ${isLowHeight ? "35%" : "40%"};
-  height: 100%;
-  aspect-ratio: 1;
-  border-radius: 18px;
-`;
-const RuleBlockText = styled.Text`
-  display: block;
-  width: 47%;
-  height: content;
-  border-radius: 18px;
-  color: whitesmoke;
-  padding: 3px;
-  font-size: ${isLowHeight ? "16px" : "18px"};
-  text-align: center;
-`;
-const RuleBlockTextInfo = styled.Text`
-  display: block;
-  width: 95%;
-  height: content;
-  border-radius: 18px;
-  color: whitesmoke;
-  padding: 10px;
-  font-size: 16px;
-  text-align: center;
-`;
 
 export default function Rule({ setRule }) {
   const { t } = useTranslation();
@@ -68,47 +14,105 @@ export default function Rule({ setRule }) {
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
       start={{ x: 0.0, y: 0.0 }}
       end={{ x: 1.0, y: 1.0 }}
-      style={{ height: "100%", width: "100%", padding: 10, paddingTop: "7%" }}
+      style={styles.gradient}
     >
-      <RuleBlock>
-        <RuleBlockImage source={require("../assets/Component 1.png")}></RuleBlockImage>
-        <RuleBlockText>{t("Rule Component1")}</RuleBlockText>
-      </RuleBlock>
-      <RuleBlock>
-        <RuleBlockText>{t("Rule Component2")}</RuleBlockText>
-        <RuleBlockImage source={require("../assets/Component 2.png")}></RuleBlockImage>
-      </RuleBlock>
-      <RuleBlock>
-        <RuleBlockImage source={require("../assets/Component 3.png")}></RuleBlockImage>
-        <RuleBlockText>{t("Rule Component3")}</RuleBlockText>
-      </RuleBlock>
-      <RuleBlockInfo>
-        <RuleBlockTextInfo>{t("Rule info")}</RuleBlockTextInfo>
-      </RuleBlockInfo>
-      <ButtonAgryLanguage>
+      <View style={styles.ruleBlock}>
+        <Image source={require("../assets/Component 1.png")} style={styles.ruleBlockImage} />
+        <Text style={styles.ruleBlockText}>{t("Rule Component1")}</Text>
+      </View>
+
+      <View style={styles.ruleBlock}>
+        <Text style={styles.ruleBlockText}>{t("Rule Component2")}</Text>
+        <Image source={require("../assets/Component 2.png")} style={styles.ruleBlockImage} />
+      </View>
+
+      <View style={styles.ruleBlock}>
+        <Image source={require("../assets/Component 3.png")} style={styles.ruleBlockImage} />
+        <Text style={styles.ruleBlockText}>{t("Rule Component3")}</Text>
+      </View>
+
+      <View style={styles.ruleBlockInfo}>
+        <Text style={styles.ruleBlockTextInfo}>{t("Rule info")}</Text>
+      </View>
+
+      <TouchableOpacity style={styles.buttonAgryLanguage} onPress={() => setRule(true)}>
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
           start={{ x: 0.0, y: 0.0 }}
           end={{ x: 1.0, y: 1.0 }}
-          style={{
-            height: "100%",
-            width: "100%",
-            padding: 10,
-            overflow: "hidden",
-            borderRadius: 30,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          style={styles.linearGradientButton}
         >
-          <ButtonText
-            onPress={() => {
-              setRule(true);
-            }}
-          >
-            {t("Rule button")}
-          </ButtonText>
+          <Text style={styles.buttonText}>{t("Rule button")}</Text>
         </LinearGradient>
-      </ButtonAgryLanguage>
+      </TouchableOpacity>
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  gradient: {
+    height: "100%",
+    width: "100%",
+    padding: 10,
+    paddingTop: "7%",
+  },
+  ruleBlock: {
+    flexDirection: "row",
+    height: isLowHeight ? "20%" : "22%",
+    gap: 10,
+    marginTop: "5%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  ruleBlockInfo: {
+    flexDirection: "row",
+    height: "10%",
+    marginTop: "2%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  ruleBlockImage: {
+    width: isLowHeight ? "35%" : "40%",
+    height: "100%",
+    aspectRatio: 1,
+    borderRadius: 18,
+  },
+  ruleBlockText: {
+    width: "47%",
+    borderRadius: 18,
+    color: "whitesmoke",
+    padding: 3,
+    fontSize: isLowHeight ? 16 : 18,
+    textAlign: "center",
+  },
+  ruleBlockTextInfo: {
+    width: "95%",
+    borderRadius: 18,
+    color: "whitesmoke",
+    padding: 10,
+    fontSize: 16,
+    textAlign: "center",
+  },
+  buttonAgryLanguage: {
+    width: 150,
+    height: 60,
+    marginTop: "2%",
+    marginHorizontal: "auto",
+    borderRadius: 28,
+    overflow: "hidden",
+    alignSelf: "center",
+  },
+  linearGradientButton: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 30,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "whitesmoke",
+    fontSize: 15,
+    textAlign: "center",
+  },
+});

@@ -1,29 +1,10 @@
-import { View, Text, Dimensions } from "react-native";
-import styled from "styled-components";
+import { View, Text, TouchableOpacity, Dimensions, StyleSheet } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import LottieView from "lottie-react-native";
 
 const screenHeight = Dimensions.get("window").height;
 const isLowHeight = screenHeight < 700;
-
-const EndlevelBlockText = styled.Text`
-  width: 100%;
-  height: 8%;
-  font-size: ${isLowHeight ? "18px" : "22px"};
-  margin-top: ${isLowHeight ? "10px" : "10%"};
-  color: whitesmoke;
-  text-align: center;
-`;
-const ButtonAgry = styled.TouchableOpacity`
-  width: 200px;
-  height: ${isLowHeight ? "40px" : "50px"};
-  margin: 0 auto;
-  border-radius: 28px;
-`;
-const ButtonText = styled.Text`
-  color: whitesmoke;
-`;
 
 export default function Endlevel({ goToBegining, time }) {
   const { t } = useTranslation();
@@ -39,45 +20,67 @@ export default function Endlevel({ goToBegining, time }) {
       colors={["#1E2322", "#1F433A", "#1E2322", "#1F433A"]}
       start={{ x: 0.0, y: 0.0 }}
       end={{ x: 1.0, y: 1.0 }}
-      style={{ height: "100%", width: "100%", padding: 10 }}
+      style={styles.container}
     >
-      <EndlevelBlockText style={{ marginTop: 30 }}>{t("Endlevel greeting")}</EndlevelBlockText>
-      <LottieView
-        autoPlay
-        style={{
-          width: "100%",
-          aspectRatio: 1 / 1,
-          backgroundColor: "#1E2322",
-          overflow: "hidden",
-          marginBottom: isLowHeight ? 5 : 20,
-        }}
-        source={require("../Animation.json")}
-      />
-      <EndlevelBlockText>
+      <Text style={[styles.endlevelBlockText, { marginTop: 30 }]}>{t("Endlevel greeting")}</Text>
+
+      <LottieView autoPlay style={styles.lottie} source={require("../Animation.json")} />
+
+      <Text style={styles.endlevelBlockText}>
         {t("Endlevel info")} {getFullTime()}
-      </EndlevelBlockText>
-      <ButtonAgry
-        onPress={() => {
-          goToBegining();
-        }}
-      >
+      </Text>
+
+      <TouchableOpacity style={styles.buttonAgry} onPress={goToBegining}>
         <LinearGradient
           colors={["#849ae9", "#6ea0eb", "#2db3f1", "#2ab4f1"]}
           start={{ x: 0.0, y: 0.0 }}
           end={{ x: 1.0, y: 1.0 }}
-          style={{
-            height: "100%",
-            width: "100%",
-            padding: 10,
-            overflow: "hidden",
-            borderRadius: 30,
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          style={styles.buttonGradient}
         >
-          <ButtonText>{t("Endlevel button")}</ButtonText>
+          <Text style={styles.buttonText}>{t("Endlevel button")}</Text>
         </LinearGradient>
-      </ButtonAgry>
+      </TouchableOpacity>
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: "100%",
+    width: "100%",
+    padding: 10,
+  },
+  endlevelBlockText: {
+    width: "100%",
+    height: "8%",
+    fontSize: isLowHeight ? 18 : 22,
+    marginTop: isLowHeight ? 10 : "10%",
+    color: "whitesmoke",
+    textAlign: "center",
+  },
+  lottie: {
+    width: "100%",
+    aspectRatio: 1,
+    backgroundColor: "#1E2322",
+    overflow: "hidden",
+    marginBottom: isLowHeight ? 5 : 20,
+  },
+  buttonAgry: {
+    width: 200,
+    height: isLowHeight ? 40 : 50,
+    alignSelf: "center",
+    borderRadius: 28,
+  },
+  buttonGradient: {
+    height: "100%",
+    width: "100%",
+    padding: 10,
+    overflow: "hidden",
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  buttonText: {
+    color: "whitesmoke",
+  },
+});
