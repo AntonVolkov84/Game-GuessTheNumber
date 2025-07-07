@@ -95,17 +95,15 @@ export default function App() {
     const requestConsentInfo = async () => {
       try {
         await MobileAds().initialize();
-        if (AdsConsent && typeof AdsConsent.requestInfoUpdate === "function") {
-          await AdsConsent.requestInfoUpdate({
-            debugGeography: AdsConsentDebugGeography.EEA,
-          });
-        }
+        await AdsConsent.requestInfoUpdate();
         await AdsConsent.loadAndShowConsentFormIfRequired();
-        const consentStatus = await AdsConsent.gatherConsent();
-        if (consentStatus.status === AdsConsentStatus.OBTAINED) {
+        const consentStatus = await AdsConsent.getStatus();
+        if (consentStatus === AdsConsentStatus.OBTAINED) {
           console.log("User gave consent!");
-        } else if (consentStatus.status === AdsConsentStatus.REQUIRED) {
+        } else if (consentStatus === AdsConsentStatus.REQUIRED) {
           console.log("Consent is still required.");
+        } else {
+          console.log("Consent status:", consentStatus);
         }
         await MobileAds().setRequestConfiguration({
           tagForChildDirectedTreatment: true,
@@ -116,7 +114,6 @@ export default function App() {
         console.warn("Consent error:", error);
       }
     };
-
     requestConsentInfo();
   }, []);
 
@@ -154,7 +151,7 @@ export default function App() {
   }, [score]);
 
   const playSound = async () => {
-    const { sound } = await Audio.Sound.createAsync(require("./assets/Light2.mp3"), { isLooping: true });
+    const { sound } = await Audio.Sound.createAsync(require("./assets/Light2.mp3"), { isLooping: true, volume: 0.6 });
     soundRef.current = sound;
     await sound.playAsync();
   };
@@ -213,7 +210,9 @@ export default function App() {
               style={styles.linearGradient}
             >
               <View style={styles.soundViewBlock}>
-                {!soundPaused && <Text style={styles.musicAttribution}>Pufino - Thoughtful (freetouse.com)</Text>}
+                <Text style={[styles.musicAttribution, { opacity: !soundPaused ? 1 : 0 }]}>
+                  Pufino - Thoughtful (freetouse.com)
+                </Text>
                 <View style={styles.blockButton}>
                   {soundPaused ? (
                     <TouchableOpacity

@@ -3,7 +3,7 @@ import { View, FlatList, Image, TouchableOpacity, Text, StyleSheet } from "react
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
 import i18next from "../i18next.js";
-import { AdsConsent, AdsConsentDebugGeography } from "react-native-google-mobile-ads";
+import { AdsConsent } from "react-native-google-mobile-ads";
 
 import { LanguageResources } from "../i18next.js";
 import languageList from "../i18n/languageList.json";
@@ -15,7 +15,6 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
   const images = {
     en: require("../assets/england.png"),
     ua: require("../assets/ukraine.png"),
-    // Добавь другие языки сюда, если нужно
   };
 
   const changeLng = (lng) => {
@@ -28,13 +27,12 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
   const showConsentFormForce = async () => {
     try {
       await AdsConsent.reset();
-      await AdsConsent.requestInfoUpdate({
-        debugGeography: AdsConsentDebugGeography.EEA,
-      });
-      const consentStatus = await AdsConsent.gatherConsent();
+      await AdsConsent.requestInfoUpdate();
+      const consentStatus = await AdsConsent.getStatus();
       console.log(consentStatus);
       await AdsConsent.showPrivacyOptionsForm();
-      console.log(consentStatus);
+      const newConsentStatus = await AdsConsent.getStatus();
+      console.log("Consent status after showing form:", newConsentStatus);
     } catch (error) {
       console.warn("Error forcing privacy options form show:", error);
     }
