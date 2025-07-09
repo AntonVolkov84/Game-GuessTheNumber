@@ -2,7 +2,7 @@
   "expo": {
     "name": "Combine numbers",
     "slug": "GuessTheNumber",
-    "version": "1.4.1",
+    "version": "1.4.3",
     "orientation": "portrait",
     "icon": "./assets/Logo.png",
     "userInterfaceStyle": "light",

@@ -21,7 +21,7 @@
     "react": "19.0.0",
     "react-i18next": "^15.0.2",
     "react-native": "0.79.5",
-    "react-native-google-mobile-ads": "^15.4.0",
+    "react-native-google-mobile-ads": "^14.7.0",
     "react-native-reanimated": "~3.17.4"
   },
   "devDependencies": {

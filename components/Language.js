@@ -28,11 +28,8 @@ export default function Language({ setLanguage, savePlayerLanguage }) {
     try {
       await AdsConsent.reset();
       await AdsConsent.requestInfoUpdate();
-      const consentStatus = await AdsConsent.getStatus();
-      console.log(consentStatus);
+      await AdsConsent.gatherConsent();
       await AdsConsent.showPrivacyOptionsForm();
-      const newConsentStatus = await AdsConsent.getStatus();
-      console.log("Consent status after showing form:", newConsentStatus);
     } catch (error) {
       console.warn("Error forcing privacy options form show:", error);
     }

@@ -15,7 +15,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as NavigationBar from "expo-navigation-bar";
 import * as SecureStore from "expo-secure-store";
 import { useTranslation } from "react-i18next";
-import { AdsConsent, AdsConsentDebugGeography, AdsConsentStatus, MobileAds } from "react-native-google-mobile-ads";
+import { AdsConsent, AdsConsentStatus, MobileAds } from "react-native-google-mobile-ads";
 
 const setLng = (lng) => {
   i18next.changeLanguage(lng);
@@ -95,15 +95,15 @@ export default function App() {
     const requestConsentInfo = async () => {
       try {
         await MobileAds().initialize();
-        await AdsConsent.requestInfoUpdate();
+        if (AdsConsent && typeof AdsConsent.requestInfoUpdate === "function") {
+          await AdsConsent.requestInfoUpdate();
+        }
         await AdsConsent.loadAndShowConsentFormIfRequired();
-        const consentStatus = await AdsConsent.getStatus();
+        const consentStatus = await AdsConsent.gatherConsent();
         if (consentStatus === AdsConsentStatus.OBTAINED) {
           console.log("User gave consent!");
         } else if (consentStatus === AdsConsentStatus.REQUIRED) {
           console.log("Consent is still required.");
-        } else {
-          console.log("Consent status:", consentStatus);
         }
         await MobileAds().setRequestConfiguration({
           tagForChildDirectedTreatment: true,

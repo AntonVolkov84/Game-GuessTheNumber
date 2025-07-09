@@ -245,7 +245,7 @@ const GuessInput = ({
 
   return (
     <View style={{ height: "100%" }}>
-      <View style={[styles.modalBlock, { display: modal ? "contents" : "none" }]}>
+      <View style={[styles.modalBlock, { display: modal ? "flex" : "none" }]}>
         <View style={styles.modalBlockInfo}>
           <Text style={styles.modalText}>{t("GuessModal info")}</Text>
           <Image
